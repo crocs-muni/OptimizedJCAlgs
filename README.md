@@ -29,7 +29,7 @@ Profiling and optimization tools:
 * [MemoryMeasurement](https://github.com/maxashwin/JavaCard/tree/master/Wkg_MemoryMeasurementScript)
 * [JCAlgTest](https://github.com/crocs-muni/JCAlgTest)
 
-JC miracle doer: [Martin Paljak](https://github.com/martinpaljak)
+JC miracle people: [Martin Paljak](https://github.com/martinpaljak), [PetrS](https://github.com/petrs)
 * [JC-ant](https://github.com/martinpaljak/ant-javacard#syntax)
 * [Global Platform Pro](https://github.com/martinpaljak/GlobalPlatformPro)
 * [Applet Playground](https://github.com/martinpaljak/AppletPlayground)
