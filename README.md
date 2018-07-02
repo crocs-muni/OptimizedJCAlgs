@@ -52,3 +52,22 @@ JC miracle doer: [Martin Paljak](https://github.com/martinpaljak)
   * MD5
 * On-card Key-pair generation (maybe?)
 * Authenticated encryption with associated data (AEAD)
+
+
+### Profiling and optimizing
+JCSha3 - almost 300 % faster (28.5s to 9s)
+JCProfiler trace:
+```
+[PERF_START-TRAP_keccakf_1],            99 ms   - initializing
+[TRAP_keccakf_1-TRAP_keccakf_2], 	18 ms   - handling endianness (could be optimized out probably)
+[TRAP_keccakf_2-TRAP_keccakf_3], 	27 ms   - array assignments
+[TRAP_keccakf_3-TRAP_keccakf_4], 	45 ms   - theta function
+[TRAP_keccakf_4-TRAP_keccakf_5], 	204 ms  - rho & pi functions (bitwise rotation is longest part)
+[TRAP_keccakf_5-TRAP_keccakf_6], 	107 ms  - chi function
+[TRAP_keccakf_6-TRAP_keccakf_7], 	0 ms    - iota function (just an assignment so it takes little time)
+[TRAP_keccakf_7-TRAP_keccakf_8], 	8814 ms - 24 rounds of keccak
+[TRAP_keccakf_8-TRAP_keccakf_9], 	31 ms   - handling endianness
+[TRAP_keccakf_9-TRAP_keccakf_COMPLETE], 19 ms   - finalizing hash algorithm
+```
+
+Removing endianness could cut some more time, more rotation optimizations are still possible, cutting up to 60 % of its computation time.
