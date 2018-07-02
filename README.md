@@ -65,7 +65,7 @@ JCProfiler trace:
 [TRAP_keccakf_4-TRAP_keccakf_5], 	204 ms  - rho & pi functions (bitwise rotation is longest part)
 [TRAP_keccakf_5-TRAP_keccakf_6], 	107 ms  - chi function
 [TRAP_keccakf_6-TRAP_keccakf_7], 	0 ms    - iota function (just an assignment so it takes little time)
-[TRAP_keccakf_7-TRAP_keccakf_8], 	8814 ms - 24 rounds of keccak
+[TRAP_keccakf_7-TRAP_keccakf_8], 	8814 ms - 24 rounds of keccak (24x trap3-7)
 [TRAP_keccakf_8-TRAP_keccakf_9], 	31 ms   - handling endianness
 [TRAP_keccakf_9-TRAP_keccakf_COMPLETE], 19 ms   - finalizing hash algorithm
 ```
