@@ -51,6 +51,7 @@ JC miracle people: [Martin Paljak](https://github.com/martinpaljak), [PetrS](htt
   * SHA3 (224, 256, 384, 512)
   * MD5
 * On-card Key-pair generation (maybe?)
+* Password-Based Key Derivation (PBKDF2)
 * Authenticated encryption with associated data (AEAD)
 
 
