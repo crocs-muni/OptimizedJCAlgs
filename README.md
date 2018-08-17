@@ -23,6 +23,8 @@ Collection of open-source JavaCard crypto algorithms. Optimized for memory and s
   * MORUS
 * [OpenPGP](https://github.com/jderuiter/javacard-openpgpcard) - open source PGP on JC
 * [LedgerHQ Wallet](https://github.com/LedgerHQ/ledger-javacard) - implementation of Ledger cryptocurrency wallet on JC
+* Password-based key derivation: [OptimizedJCAlgs](https://github.com/MiragePV/OptimizedJCAlgs) - this project, unoptimized (yet)
+  * PBKDF2 (Sha1,Sha256,Sha384,Sha512; single-block, 128-bit salt)
 
 Profiling and optimization tools:
 * [JCProfiler](https://github.com/OpenCryptoProject/JCProfiler)
@@ -51,7 +53,7 @@ JC miracle people: [Martin Paljak](https://github.com/martinpaljak), [PetrS](htt
   * SHA3 (224, 256, 384, 512)
   * MD5
 * On-card Key-pair generation (maybe?)
-* Password-Based Key Derivation (PBKDF2)
+* Password-Based Key Derivation (PBKDF2) - done in this project
 * Authenticated encryption with associated data (AEAD)
 
 
