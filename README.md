@@ -3,19 +3,19 @@ Collection of open-source JavaCard crypto algorithms. Optimized for memory and s
 
 ### List of known JC crypto algs on GitHub:
 * Elliptic curves: [JCMathLib](https://github.com/OpenCryptoProject/JCMathLib)
-* Sha3 (Keccak+SHAKE): [JCSha3](https://github.com/MiragePV/JCSha3) (I'll probably discard this one. It needs A LOT of work)
-* [JCSWAlgs](https://github.com/JavaCardSpot-dev/JCSWAlgs)
+* Sha3 (Keccak): [JCSha3](https://github.com/MiragePV/JCSha3) (Pretty slow, SHAKE not done yet)
+* [JCSWAlgs](https://github.com/JavaCardSpot-dev/JCSWAlgs) (don't blindly trust the code there)
   * Sha3
   * Sha512
   * AES
-  * Twine Cipher
-  * Zorro Cipher
+  * Twine Cipher (incorrect implementation there, correct here)
+  * Zorro Cipher (correct implementation here, needs more review though)
 * [Primitives_SmartCard](https://github.com/albertocarp/Primitives_SmartCard/tree/master/src/sid)
   * Sha3
   * LBlock Cipher
   * Picollo Cipher
   * Rectangle Cipher
-* Authenticated Encryption: [AEonJC](https://github.com/palkrajesh/AEonJC)
+* Authenticated Encryption: [AEonJC](https://github.com/palkrajesh/AEonJC) (well optimized)
   * AEGIS
   * ACORN
   * ASCON
@@ -24,7 +24,7 @@ Collection of open-source JavaCard crypto algorithms. Optimized for memory and s
 * [OpenPGP](https://github.com/jderuiter/javacard-openpgpcard) - open source PGP on JC
 * [LedgerHQ Wallet](https://github.com/LedgerHQ/ledger-javacard) - implementation of Ledger cryptocurrency wallet on JC
 * Password-based key derivation: [OptimizedJCAlgs](https://github.com/MiragePV/OptimizedJCAlgs) - this project, unoptimized (yet)
-  * PBKDF2 (Sha1,Sha256,Sha384,Sha512; single-block, 128-bit salt)
+  * PBKDF2 (Sha1, Sha256; single-block, 128-bit salt) (pretty slow)
 
 Profiling and optimization tools:
 * [JCProfiler](https://github.com/OpenCryptoProject/JCProfiler)
@@ -58,7 +58,7 @@ JC miracle people: [Martin Paljak](https://github.com/martinpaljak), [PetrS](htt
 
 
 ### Profiling and optimizing
-JCSha3 - almost 300 % faster (28.5s to 9s)
+JCSha3 - ~300 % faster (28.5s to 9s)
 JCProfiler trace:
 ```
 [PERF_START-TRAP_keccakf_1],            99 ms   - initializing
