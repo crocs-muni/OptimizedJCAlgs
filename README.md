@@ -76,8 +76,7 @@ JCProfiler trace:
 Removing endianness could cut some more time, more rotation optimizations are still possible, cutting up to 60 % of its computation time.
 
 #### Twine Cipher
-no comparison to original - original was unfinished and not working correctly
-
+no comparison to original - original was unfinished and not working correctly\
 averages of NetBeans profiler traces of Twine128:
 ```
 [Twine_init_80],  204 ms - initializing with 80-bit key
@@ -86,6 +85,5 @@ averages of NetBeans profiler traces of Twine128:
 [8_byte_enc],     371 ms - encryption of 8 bytes
 [Twine_cleanup],    4 ms - clearing memory after use
 ```
-With 128-bit key we are averaging 1070ms on encrypting/decrypting 16 bytes of data (ECB mode)
-
+With 128-bit key we are averaging 1070ms on encrypting/decrypting 16 bytes of data (ECB mode)\
 CAP file is 6.6kb in size.
