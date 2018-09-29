@@ -15,6 +15,8 @@ import javacardx.crypto.Cipher;
  * @optimized Matej Evin 27.9.2018
  */
 
+ 
+ //TODO expand128 key now uses expand 80!
  public class TwineCipher extends Cipher {
 
     //TWINE-specific tables
@@ -41,8 +43,8 @@ import javacardx.crypto.Cipher;
     };
 
     //constants
-    public static final short TEMP_LENGTH       = 32;
-    public static final short TEMP_HALF         = 16;
+    public static final short TEMP_LENGTH       = 36; //16 bytes first half + 16 bytes second half, 4 auxiliary bytes for rotations
+    public static final short TEMP_HALF         = 16; //gets you to second half of temp array (disregards 4 aux bytes)
     public static final short RK_LENGTH         = 288;
     public static final byte  ALG_TWINE         = 19;
     public static final byte  TWINE_CIPHER_80   = 0x30;
@@ -60,169 +62,123 @@ import javacardx.crypto.Cipher;
     //ram arrays
     public byte[] temp  = JCSystem.makeTransientByteArray(TEMP_LENGTH, JCSystem.CLEAR_ON_DESELECT); // temporary - for intermediate values
     public byte[] rk    = JCSystem.makeTransientByteArray(RK_LENGTH, JCSystem.CLEAR_ON_DESELECT);     // round key - takes 288 bytes yet uses just 4 bits of each byte. Can be maybe optimized, but needs more complicated mathematic operations
-
-    //expand key, called by init function
-    //expand key takes second half of temp array where key is stored temporarily
-    private void expand80Key() {
+    
+    //expansion of both 80-bit and 128-bit key into Round Key
+    private void keySchedule() {    
         short i;
 
-        //this double typecasting looks so bad. there must be a better way
-        //needs testing
-        temp[0]  = (byte) ((short) (temp[16] & 0x00FF) >> 4);
-        temp[1]  = (byte) ((short) (temp[16] & 0x00FF) & 0x0F);
-        temp[2]  = (byte) ((short) (temp[17] & 0x00FF) >> 4);
-        temp[3]  = (byte) ((short) (temp[17] & 0x00FF) & 0x0F);
-        temp[4]  = (byte) ((short) (temp[18] & 0x00FF) >> 4);
-        temp[5]  = (byte) ((short) (temp[18] & 0x00FF) & 0x0F);
-        temp[6]  = (byte) ((short) (temp[19] & 0x00FF) >> 4);
-        temp[7]  = (byte) ((short) (temp[19] & 0x00FF) & 0x0F);
-        temp[8]  = (byte) ((short) (temp[20] & 0x00FF) >> 4);
-        temp[9]  = (byte) ((short) (temp[20] & 0x00FF) & 0x0F);
-        temp[10] = (byte) ((short) (temp[21] & 0x00FF) >> 4);
-        temp[11] = (byte) ((short) (temp[21] & 0x00FF) & 0x0F);
-        temp[12] = (byte) ((short) (temp[22] & 0x00FF) >> 4);
-        temp[13] = (byte) ((short) (temp[22] & 0x00FF) & 0x0F);
-        temp[14] = (byte) ((short) (temp[23] & 0x00FF) >> 4);
-        temp[15] = (byte) ((short) (temp[23] & 0x00FF) & 0x0F);
-        temp[16] = (byte) ((short) (temp[24] & 0x00FF) >> 4);
-        temp[17] = (byte) ((short) (temp[24] & 0x00FF) & 0x0F);
-        temp[18] = (byte) ((short) (temp[25] & 0x00FF) >> 4);
-        temp[19] = (byte) ((short) (temp[25] & 0x00FF) & 0x0F);
+        temp[0]  = (byte) (temp[16] >> 4 & 0x0F); temp[1]  = (byte) (temp[16] & 0x0F);
+        temp[2]  = (byte) (temp[17] >> 4 & 0x0F); temp[3]  = (byte) (temp[17] & 0x0F);
+        temp[4]  = (byte) (temp[18] >> 4 & 0x0F); temp[5]  = (byte) (temp[18] & 0x0F);
+        temp[6]  = (byte) (temp[19] >> 4 & 0x0F); temp[7]  = (byte) (temp[19] & 0x0F);
+        temp[8]  = (byte) (temp[20] >> 4 & 0x0F); temp[9]  = (byte) (temp[20] & 0x0F);
+        temp[10] = (byte) (temp[21] >> 4 & 0x0F); temp[11] = (byte) (temp[21] & 0x0F);
+        temp[12] = (byte) (temp[22] >> 4 & 0x0F); temp[13] = (byte) (temp[22] & 0x0F);
+        temp[14] = (byte) (temp[23] >> 4 & 0x0F); temp[15] = (byte) (temp[23] & 0x0F);
+        temp[16] = (byte) (temp[24] >> 4 & 0x0F); temp[17] = (byte) (temp[24] & 0x0F);
+        temp[18] = (byte) (temp[25] >> 4 & 0x0F); temp[19] = (byte) (temp[25] & 0x0F);
+        if (keyLength == 128) {
+        temp[20] = (byte) (temp[26] >> 4 & 0x0F); temp[21] = (byte) (temp[26] & 0x0F);
+        temp[22] = (byte) (temp[27] >> 4 & 0x0F); temp[23] = (byte) (temp[27] & 0x0F);
+        temp[24] = (byte) (temp[28] >> 4 & 0x0F); temp[25] = (byte) (temp[28] & 0x0F);
+        temp[26] = (byte) (temp[29] >> 4 & 0x0F); temp[27] = (byte) (temp[29] & 0x0F);
+        temp[28] = (byte) (temp[30] >> 4 & 0x0F); temp[29] = (byte) (temp[30] & 0x0F);
+        temp[30] = (byte) (temp[31] >> 4 & 0x0F); temp[31] = (byte) (temp[31] & 0x0F); }
 
         for (i = 0; i < 35; i++) {
-            rk[(short) (i * 8)] = temp[1];
-            rk[(short) (i * 8 + 1)] = temp[3];
-            rk[(short) (i * 8 + 2)] = temp[4];
-            rk[(short) (i * 8 + 3)] = temp[6];
-            rk[(short) (i * 8 + 4)] = temp[13];
-            rk[(short) (i * 8 + 5)] = temp[14];
-            rk[(short) (i * 8 + 6)] = temp[15];
-            rk[(short) (i * 8 + 7)] = temp[16];
+            if (keyLength == 80) {
+                rk[(short) (i * 8    )] = temp[1];
+                rk[(short) (i * 8 + 1)] = temp[3];
+                rk[(short) (i * 8 + 2)] = temp[4];
+                rk[(short) (i * 8 + 3)] = temp[6];
+                rk[(short) (i * 8 + 4)] = temp[13];
+                rk[(short) (i * 8 + 5)] = temp[14];
+                rk[(short) (i * 8 + 6)] = temp[15];
+                rk[(short) (i * 8 + 7)] = temp[16];
+            }
+            if (keyLength == 128) {
+                rk[(short) (i * 8    )] = temp[2];
+                rk[(short) (i * 8 + 1)] = temp[3];
+                rk[(short) (i * 8 + 2)] = temp[12];
+                rk[(short) (i * 8 + 3)] = temp[15];
+                rk[(short) (i * 8 + 4)] = temp[17];
+                rk[(short) (i * 8 + 5)] = temp[18];
+                rk[(short) (i * 8 + 6)] = temp[28];
+                rk[(short) (i * 8 + 7)] = temp[31];
+            }
 
-            temp[1] ^= SBOX[temp[0]];
-            temp[4] ^= SBOX[temp[16]];
-            temp[7] ^= ROUNDCONST[i] >> 3;
-            temp[19] ^= ROUNDCONST[i] & 7;
+            temp[1]  ^= SBOX[temp[0]];
+            temp[4]  ^= SBOX[temp[16]];
+            if (keyLength == 128) {
+            temp[23] ^= SBOX[temp[30]]; }
+            
+            temp[7]  ^= (byte) (ROUNDCONST[i] >> 3);
+            temp[19] ^= (byte) (ROUNDCONST[i] & 7);
 
             //ROTL4 of first 4 elements
-            temp[20] = temp[0];
-            temp[0] = temp[1];
-            temp[1] = temp[2];
-            temp[2] = temp[3];
-            temp[3] = temp[20];
+            temp[32] = temp[0];
+            temp[0]  = temp[1];
+            temp[1]  = temp[2];
+            temp[2]  = temp[3];
+            temp[3]  = temp[32];
             
             //ROTL16 of all 20 elements
-            temp[20] = temp[0];   temp[21] = temp[1];   temp[22] = temp[2];   temp[23] = temp[3];
+            temp[32] = temp[0];   temp[33] = temp[1];   temp[34] = temp[2];   temp[35] = temp[3];
             temp[0]  = temp[4];   temp[1]  = temp[5];   temp[2]  = temp[6];   temp[3]  = temp[7];
             temp[4]  = temp[8];   temp[5]  = temp[9];   temp[6]  = temp[10];  temp[7]  = temp[11];
             temp[8]  = temp[12];  temp[9]  = temp[13];  temp[10] = temp[14];  temp[11] = temp[15];
             temp[12] = temp[16];  temp[13] = temp[17];  temp[14] = temp[18];  temp[15] = temp[19];
+            if (keyLength == 80) {
+            temp[16] = temp[32];  temp[17] = temp[33];  temp[18] = temp[34];  temp[19] = temp[35]; }
+            if (keyLength == 128) {
             temp[16] = temp[20];  temp[17] = temp[21];  temp[18] = temp[22];  temp[19] = temp[23];
+            temp[20] = temp[24];  temp[21] = temp[25];  temp[22] = temp[26];  temp[23] = temp[27];
+            temp[24] = temp[28];  temp[25] = temp[29];  temp[26] = temp[30];  temp[27] = temp[31];
+            temp[28] = temp[32];  temp[29] = temp[33];  temp[30] = temp[34];  temp[31] = temp[35]; }
         }
-
-        rk[280] = temp[1];
-        rk[281] = temp[3];
-        rk[282] = temp[4];
-        rk[283] = temp[6];
-        rk[284] = temp[13];
-        rk[285] = temp[14];
-        rk[286] = temp[15];
-        rk[287] = temp[16];
-    }
-
-    //todo
-    //expand 128bit key
-    private void expand128Key() {
-        short i;
-
-        //this double typecasting looks so bad. there must be a better way
-        //needs testing
-        temp[0]  = (byte) ((short) (temp[16] & 0x00FF) >> 4);
-        temp[1]  = (byte) ((short) (temp[16] & 0x00FF) & 0x0F);
-        temp[2]  = (byte) ((short) (temp[17] & 0x00FF) >> 4);
-        temp[3]  = (byte) ((short) (temp[17] & 0x00FF) & 0x0F);
-        temp[4]  = (byte) ((short) (temp[18] & 0x00FF) >> 4);
-        temp[5]  = (byte) ((short) (temp[18] & 0x00FF) & 0x0F);
-        temp[6]  = (byte) ((short) (temp[19] & 0x00FF) >> 4);
-        temp[7]  = (byte) ((short) (temp[19] & 0x00FF) & 0x0F);
-        temp[8]  = (byte) ((short) (temp[20] & 0x00FF) >> 4);
-        temp[9]  = (byte) ((short) (temp[20] & 0x00FF) & 0x0F);
-        temp[10] = (byte) ((short) (temp[21] & 0x00FF) >> 4);
-        temp[11] = (byte) ((short) (temp[21] & 0x00FF) & 0x0F);
-        temp[12] = (byte) ((short) (temp[22] & 0x00FF) >> 4);
-        temp[13] = (byte) ((short) (temp[22] & 0x00FF) & 0x0F);
-        temp[14] = (byte) ((short) (temp[23] & 0x00FF) >> 4);
-        temp[15] = (byte) ((short) (temp[23] & 0x00FF) & 0x0F);
-        temp[16] = (byte) ((short) (temp[24] & 0x00FF) >> 4);
-        temp[17] = (byte) ((short) (temp[24] & 0x00FF) & 0x0F);
-        temp[18] = (byte) ((short) (temp[25] & 0x00FF) >> 4);
-        temp[19] = (byte) ((short) (temp[25] & 0x00FF) & 0x0F);
-
-        for (i = 0; i < 35; i++) {
-            rk[(short) (i * 8)] = temp[1];
-            rk[(short) (i * 8 + 1)] = temp[3];
-            rk[(short) (i * 8 + 2)] = temp[4];
-            rk[(short) (i * 8 + 3)] = temp[6];
-            rk[(short) (i * 8 + 4)] = temp[13];
-            rk[(short) (i * 8 + 5)] = temp[14];
-            rk[(short) (i * 8 + 6)] = temp[15];
-            rk[(short) (i * 8 + 7)] = temp[16];
-
-            temp[1] ^= SBOX[temp[0]];
-            temp[4] ^= SBOX[temp[16]];
-            temp[7] ^= ROUNDCONST[i] >> 3;
-            temp[19] ^= ROUNDCONST[i] & 7;
-
-            //ROTL4 of first 4 elements
-            temp[20] = temp[0];
-            temp[0] = temp[1];
-            temp[1] = temp[2];
-            temp[2] = temp[3];
-            temp[3] = temp[20];
-            
-            //ROTL16 of all 20 elements
-            temp[20] = temp[0];   temp[21] = temp[1];   temp[22] = temp[2];   temp[23] = temp[3];
-            temp[0]  = temp[4];   temp[1]  = temp[5];   temp[2]  = temp[6];   temp[3]  = temp[7];
-            temp[4]  = temp[8];   temp[5]  = temp[9];   temp[6]  = temp[10];  temp[7]  = temp[11];
-            temp[8]  = temp[12];  temp[9]  = temp[13];  temp[10] = temp[14];  temp[11] = temp[15];
-            temp[12] = temp[16];  temp[13] = temp[17];  temp[14] = temp[18];  temp[15] = temp[19];
-            temp[16] = temp[20];  temp[17] = temp[21];  temp[18] = temp[22];  temp[19] = temp[23];
+        if (keyLength == 80) {
+            rk[280] = temp[1];
+            rk[281] = temp[3];
+            rk[282] = temp[4];   
+            rk[283] = temp[6];
+            rk[284] = temp[13]; 
+            rk[285] = temp[14]; 
+            rk[286] = temp[15];  
+            rk[287] = temp[16];
         }
-
-        rk[280] = temp[1];
-        rk[281] = temp[3];
-        rk[282] = temp[4];
-        rk[283] = temp[6];
-        rk[284] = temp[13];
-        rk[285] = temp[14];
-        rk[286] = temp[15];
-        rk[287] = temp[16];
-    }
+        if (keyLength == 128) {
+            rk[280] = temp[2];  
+            rk[281] = temp[3]; 
+            rk[282] = temp[12];
+            rk[283] = temp[15];
+            rk[284] = temp[17];
+            rk[285] = temp[18];
+            rk[286] = temp[28];
+            rk[287] = temp[31];
+        }
     }
 
     //encrypt 8 bytes
     private byte encrypt(byte[] src, short srcOff, byte[] dest, short destOff) {
-
         short i, j;
 
         //expand plaintext
-        //temp[0] - temp[15] now contains plaintext split into 16 4-bit parts 0000xxxx
-        temp[0]  = (byte) ((short) (src[(short) (    srcOff)] & 0x00FF) >> 4);
-        temp[1]  = (byte) ((short) (src[(short) (    srcOff)] & 0x00FF) & 0x0F);
-        temp[2]  = (byte) ((short) (src[(short) (1 + srcOff)] & 0x00FF) >> 4);
-        temp[3]  = (byte) ((short) (src[(short) (1 + srcOff)] & 0x00FF) & 0x0F);
-        temp[4]  = (byte) ((short) (src[(short) (2 + srcOff)] & 0x00FF) >> 4);
-        temp[5]  = (byte) ((short) (src[(short) (2 + srcOff)] & 0x00FF) & 0x0F);
-        temp[6]  = (byte) ((short) (src[(short) (3 + srcOff)] & 0x00FF) >> 4);
-        temp[7]  = (byte) ((short) (src[(short) (3 + srcOff)] & 0x00FF) & 0x0F);
-        temp[8]  = (byte) ((short) (src[(short) (4 + srcOff)] & 0x00FF) >> 4);
-        temp[9]  = (byte) ((short) (src[(short) (4 + srcOff)] & 0x00FF) & 0x0F);
-        temp[10] = (byte) ((short) (src[(short) (5 + srcOff)] & 0x00FF) >> 4);
-        temp[11] = (byte) ((short) (src[(short) (5 + srcOff)] & 0x00FF) & 0x0F);
-        temp[12] = (byte) ((short) (src[(short) (6 + srcOff)] & 0x00FF) >> 4);
-        temp[13] = (byte) ((short) (src[(short) (6 + srcOff)] & 0x00FF) & 0x0F);
-        temp[14] = (byte) ((short) (src[(short) (7 + srcOff)] & 0x00FF) >> 4);
-        temp[15] = (byte) ((short) (src[(short) (7 + srcOff)] & 0x00FF) & 0x0F);
+        temp[0]  = (byte) (src[             srcOff ] >> 4 & 0x0F);
+        temp[1]  = (byte) (src[             srcOff ] & 0x0F);
+        temp[2]  = (byte) (src[(short) (1 + srcOff)] >> 4 & 0x0F);
+        temp[3]  = (byte) (src[(short) (1 + srcOff)] & 0x0F);
+        temp[4]  = (byte) (src[(short) (2 + srcOff)] >> 4 & 0x0F);
+        temp[5]  = (byte) (src[(short) (2 + srcOff)] & 0x0F);
+        temp[6]  = (byte) (src[(short) (3 + srcOff)] >> 4 & 0x0F);
+        temp[7]  = (byte) (src[(short) (3 + srcOff)] & 0x0F);
+        temp[8]  = (byte) (src[(short) (4 + srcOff)] >> 4 & 0x0F);
+        temp[9]  = (byte) (src[(short) (4 + srcOff)] & 0x0F);
+        temp[10] = (byte) (src[(short) (5 + srcOff)] >> 4 & 0x0F);
+        temp[11] = (byte) (src[(short) (5 + srcOff)] & 0x0F);
+        temp[12] = (byte) (src[(short) (6 + srcOff)] >> 4 & 0x0F);
+        temp[13] = (byte) (src[(short) (6 + srcOff)] & 0x0F);
+        temp[14] = (byte) (src[(short) (7 + srcOff)] >> 4 & 0x0F);
+        temp[15] = (byte) (src[(short) (7 + srcOff)] & 0x0F);
 
         for (i = 0; i < 35; i++) {
             for (j = 0; j < 8; j++) {
@@ -232,7 +188,7 @@ import javacardx.crypto.Cipher;
                 temp[(short) (SHUF[j] + TEMP_HALF)] = temp[j];
             }
 
-            Util.arrayCopy(temp, TEMP_HALF, temp, (short) 0, TEMP_HALF);
+            Util.arrayCopyNonAtomic(temp, TEMP_HALF, temp, (short) 0, TEMP_HALF);
         }
         //36th sub-block
         for (j = 0; j < 8; j++) {
@@ -240,7 +196,7 @@ import javacardx.crypto.Cipher;
         }
 
         //result in dest array
-        dest[(short) (    destOff)] = (byte) ((temp[0]  << 4) | temp[1]);
+        dest[             destOff ] = (byte) ((temp[0]  << 4) | temp[1]);
         dest[(short) (1 + destOff)] = (byte) ((temp[2]  << 4) | temp[3]);
         dest[(short) (2 + destOff)] = (byte) ((temp[4]  << 4) | temp[5]);
         dest[(short) (3 + destOff)] = (byte) ((temp[6]  << 4) | temp[7]);
@@ -254,26 +210,25 @@ import javacardx.crypto.Cipher;
 
     //decrypt 8 bytes
     private byte decrypt(byte[] src, short srcOff, byte[] dest, short destOff) {
-
         short i, j;
 
-        //expand plaintext
-        temp[0]  = (byte) ((short) (src[(short) (    srcOff)] & 0x00FF) >> 4);
-        temp[1]  = (byte) ((short) (src[(short) (    srcOff)] & 0x00FF) & 0x0F);
-        temp[2]  = (byte) ((short) (src[(short) (1 + srcOff)] & 0x00FF) >> 4);
-        temp[3]  = (byte) ((short) (src[(short) (1 + srcOff)] & 0x00FF) & 0x0F);
-        temp[4]  = (byte) ((short) (src[(short) (2 + srcOff)] & 0x00FF) >> 4);
-        temp[5]  = (byte) ((short) (src[(short) (2 + srcOff)] & 0x00FF) & 0x0F);
-        temp[6]  = (byte) ((short) (src[(short) (3 + srcOff)] & 0x00FF) >> 4);
-        temp[7]  = (byte) ((short) (src[(short) (3 + srcOff)] & 0x00FF) & 0x0F);
-        temp[8]  = (byte) ((short) (src[(short) (4 + srcOff)] & 0x00FF) >> 4);
-        temp[9]  = (byte) ((short) (src[(short) (4 + srcOff)] & 0x00FF) & 0x0F);
-        temp[10] = (byte) ((short) (src[(short) (5 + srcOff)] & 0x00FF) >> 4);
-        temp[11] = (byte) ((short) (src[(short) (5 + srcOff)] & 0x00FF) & 0x0F);
-        temp[12] = (byte) ((short) (src[(short) (6 + srcOff)] & 0x00FF) >> 4);
-        temp[13] = (byte) ((short) (src[(short) (6 + srcOff)] & 0x00FF) & 0x0F);
-        temp[14] = (byte) ((short) (src[(short) (7 + srcOff)] & 0x00FF) >> 4);
-        temp[15] = (byte) ((short) (src[(short) (7 + srcOff)] & 0x00FF) & 0x0F);
+        //expand ciphertext
+        temp[0]  = (byte) (src[             srcOff ] >> 4 & 0x0F);
+        temp[1]  = (byte) (src[             srcOff ] & 0x0F);
+        temp[2]  = (byte) (src[(short) (1 + srcOff)] >> 4 & 0x0F);
+        temp[3]  = (byte) (src[(short) (1 + srcOff)] & 0x0F);
+        temp[4]  = (byte) (src[(short) (2 + srcOff)] >> 4 & 0x0F);
+        temp[5]  = (byte) (src[(short) (2 + srcOff)] & 0x0F);
+        temp[6]  = (byte) (src[(short) (3 + srcOff)] >> 4 & 0x0F);
+        temp[7]  = (byte) (src[(short) (3 + srcOff)] & 0x0F);
+        temp[8]  = (byte) (src[(short) (4 + srcOff)] >> 4 & 0x0F);
+        temp[9]  = (byte) (src[(short) (4 + srcOff)] & 0x0F);
+        temp[10] = (byte) (src[(short) (5 + srcOff)] >> 4 & 0x0F);
+        temp[11] = (byte) (src[(short) (5 + srcOff)] & 0x0F);
+        temp[12] = (byte) (src[(short) (6 + srcOff)] >> 4 & 0x0F);
+        temp[13] = (byte) (src[(short) (6 + srcOff)] & 0x0F);
+        temp[14] = (byte) (src[(short) (7 + srcOff)] >> 4 & 0x0F);
+        temp[15] = (byte) (src[(short) (7 + srcOff)] & 0x0F);
 
         for (i = 35; i > 0; i--) {
             for (j = 0; j < 8; j++) {
@@ -283,7 +238,6 @@ import javacardx.crypto.Cipher;
             for (j = 0; j < 16; j++) {
                 temp[(short) (SHUFINV[j] + TEMP_HALF)] = temp[j];
             }
-            Util.arrayCopy(temp, TEMP_HALF, temp, (short) 0, TEMP_HALF);
         }
         //0th sub-block
         for (j = 0; j < 8; j++) {
@@ -291,7 +245,7 @@ import javacardx.crypto.Cipher;
         }
 
         //result in dest array
-        dest[(short) (    destOff)] = (byte) ((temp[0]  << 4) | temp[1]);
+        dest[             destOff ] = (byte) ((temp[0]  << 4) | temp[1]);
         dest[(short) (1 + destOff)] = (byte) ((temp[2]  << 4) | temp[3]);
         dest[(short) (2 + destOff)] = (byte) ((temp[4]  << 4) | temp[5]);
         dest[(short) (3 + destOff)] = (byte) ((temp[6]  << 4) | temp[7]);
@@ -313,10 +267,10 @@ import javacardx.crypto.Cipher;
     public static TwineCipher getInstance(byte algorithm) throws CryptoException {
         switch(algorithm){
             case TWINE_CIPHER_80:
-                keyLength = (byte) 80;
+                keyLength = (short) 80;
                 break;
             case TWINE_CIPHER_128:
-                keyLength = (byte) 128;
+                keyLength = (short) 128;
                 break;
             default:
                 throw new CryptoException(CryptoException.NO_SUCH_ALGORITHM);
@@ -332,23 +286,23 @@ import javacardx.crypto.Cipher;
         if (!isInitialized) {
             throw new CryptoException(CryptoException.UNINITIALIZED_KEY);
         }
-        //not sure how long input this should process. 8 or 16 or how many?
+        
         if (inLength % 8 != 0) {
             throw new CryptoException(CryptoException.ILLEGAL_USE);
         }
 
         short i;
         if (mode == Cipher.MODE_ENCRYPT) {
-            for (i = 0; i < inLength / 8; i++) {
+            for (i = 0; i < (short) (inLength / 8); i++) {
                 encrypt(inBuff, (short) (i * 8 + inOffset), outBuff, (short) (i * 8 + outOffset));
             }
-            Util.arrayFillNonAtomic(temp, (short) 0, TEMP_LENGTH, (byte) 0);
         } else {
-            for (i = 0; i < inLength / 8; i++) {
+            for (i = 0; i < (short) (inLength / 8); i++) {
                 decrypt(inBuff, (short) (i * 8 + inOffset), outBuff, (short) (i * 8 + outOffset));
             }
-            Util.arrayFillNonAtomic(temp, (short) 0, TEMP_LENGTH, (byte) 0);
         }
+        Util.arrayFillNonAtomic(temp, (short) 0, TEMP_LENGTH, (byte) 0);
+        
         return inLength;
     }
 
@@ -369,16 +323,8 @@ import javacardx.crypto.Cipher;
         //extract the key itself, store temporarily in second half of temp array
         cipherKey.getKey(temp, TEMP_HALF);
         //expand round key with deskey, wipe the key from memory
-        switch (keyLength) {
-            case (byte) 80:
-                expand80Key();
-                Util.arrayFillNonAtomic(temp, (short) 0, TEMP_LENGTH, (byte) 0);
-                break;
-            case (byte) 128:
-                expand128Key();
-                Util.arrayFillNonAtomic(temp, (short) 0, TEMP_LENGTH, (byte) 0);
-                break;
-        }
+        keySchedule();
+        Util.arrayFillNonAtomic(temp, (short) 0, TEMP_LENGTH, (byte) 0);
 
         isInitialized = true;
     }
