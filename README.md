@@ -58,7 +58,8 @@ JC miracle people: [Martin Paljak](https://github.com/martinpaljak), [PetrS](htt
 
 
 ### Profiling and optimizing
-JCSha3 - ~300 % faster (28.5s to 9s)
+#### JCSha3
+~300 % faster (28.5s to 9s)
 JCProfiler trace:
 ```
 [PERF_START-TRAP_keccakf_1],            99 ms   - initializing
@@ -72,5 +73,17 @@ JCProfiler trace:
 [TRAP_keccakf_8-TRAP_keccakf_9], 	31 ms   - handling endianness
 [TRAP_keccakf_9-TRAP_keccakf_COMPLETE], 19 ms   - finalizing hash algorithm
 ```
-
 Removing endianness could cut some more time, more rotation optimizations are still possible, cutting up to 60 % of its computation time.
+
+#### Twine Cipher
+no comparison to original - original was unfinished and not working correctly
+averages of NetBeans profiler traces of Twine128:
+```
+[Twine_init_80],  204 ms - initializing with 80-bit key
+[Twine_init_128], 337 ms - initializing with 128-bit key
+[8_byte_enc],     362 ms - encryption of 8 bytes
+[8_byte_enc],     371 ms - encryption of 8 bytes
+[Twine_cleanup],    4 ms - clearing memory after use
+```
+With 128-bit key we are averaging 1070ms on encrypting/decrypting 16 bytes of data (ECB mode)
+CAP file is 6.6kb in size.
