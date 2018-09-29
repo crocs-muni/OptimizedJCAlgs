@@ -54,10 +54,11 @@ import javacardx.crypto.Cipher;
     private DESKey cipherKey;
 
     //variables
+    boolean                    isInitialized    = false;    //flag if engine is initialized with key. package-visible
     private byte               mode;                        //mode - encrypt/decrypt
     private static short       keyLength;                   //length of key in bits (80 or 128)
     private static TwineCipher m_instance       = null;     //instance of cipher
-    private boolean            isInitialized    = false;    //flag if engine is initialized with key
+    
 
     //ram arrays
     public byte[] temp  = JCSystem.makeTransientByteArray(TEMP_LENGTH, JCSystem.CLEAR_ON_DESELECT); // temporary - for intermediate values

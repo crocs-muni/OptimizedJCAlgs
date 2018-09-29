@@ -162,10 +162,10 @@ public class TwineApplet extends javacard.framework.Applet
         if (!m_des.isInitialized())
             m_des.setKey(m_ramArray1, (short) 0);
         
-        m_twine.init(m_des, Cipher.MODE_ENCRYPT);
+        if (!m_twine.isInitialized)
+            m_twine.init(m_des, Cipher.MODE_ENCRYPT);
         
         //plaintext
-        //3a 8a 2c 2b 2d d5 4e d2 90 00
         m_ramArray1[0] = (byte) 0x01;
         m_ramArray1[1] = (byte) 0x23;
         m_ramArray1[2] = (byte) 0x45;
@@ -175,18 +175,9 @@ public class TwineApplet extends javacard.framework.Applet
         m_ramArray1[6] = (byte) 0xcd;
         m_ramArray1[7] = (byte) 0xef;
         
-        m_ramArray1[8] = (byte)  0x01;
-        m_ramArray1[9] = (byte)  0x23;
-        m_ramArray1[10] = (byte) 0x45;
-        m_ramArray1[11] = (byte) 0x67;
-        m_ramArray1[12] = (byte) 0x89;
-        m_ramArray1[13] = (byte) 0xab;
-        m_ramArray1[14] = (byte) 0xcd;
-        m_ramArray1[15] = (byte) 0xef;
-        
         
         //Util.arrayCopyNonAtomic(apdubuf, ISO7816.OFFSET_CDATA, m_ramArray1, (short) 0, dataLen);
-        short ret = m_twine.doFinal(m_ramArray1, (short) 0, (short) 16, apdubuf, ISO7816.OFFSET_CDATA);
+        short ret = m_twine.doFinal(m_ramArray1, (short) 0, (short) 8, apdubuf, ISO7816.OFFSET_CDATA);
         
         // SEND OUTGOING BUFFER
         apdu.setOutgoingAndSend(ISO7816.OFFSET_CDATA, ret);
