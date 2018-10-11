@@ -16,9 +16,9 @@ Collection of open-source JavaCard crypto algorithms. Optimized for memory and s
   * Picollo Cipher
   * Rectangle Cipher
 * Authenticated Encryption: [AEonJC](https://github.com/palkrajesh/AEonJC) (well optimized)
-  * AEGIS
+  * AEGIS (
   * ACORN
-  * ASCON
+  * ASCON (optimization improvement: 435%: from 135seconds to 31 seconds!)
   * CLOC
   * MORUS
 * [OpenPGP](https://github.com/jderuiter/javacard-openpgpcard) - open source PGP on JC
