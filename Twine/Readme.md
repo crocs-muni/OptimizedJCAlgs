@@ -41,14 +41,14 @@ return  ALG_TWINE value
 Update (not supported):
 ```` java
 public short update(byte[] inBuff, short inOffset, short inLength, byte[] outBuff, short outOffset)
-always throws INVALID_INIT exception
-this method is not supported on lightweight Twine cipher (just use doFinal)
+// always throws INVALID_INIT exception
+// this method is not supported on lightweight Twine cipher (just use doFinal)
 ````
 Initialize with array (not supported)
 ```` java
 public void init(Key theKey, byte theMode, byte[] bArray, short bOff, short bLen)
-always throws INVALID_INIT exception
-this method is not supported on lightweight Twine cipher (use supported init)
+// always throws INVALID_INIT exception
+// this method is not supported on lightweight Twine cipher (use supported init)
 ````
 
 ## Example
