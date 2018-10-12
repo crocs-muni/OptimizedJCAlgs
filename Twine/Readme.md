@@ -62,11 +62,11 @@ private DESKey m_des = null;   //key
 m_twine = TwineCipher.getInstance(TwineCipher.TWINE_CIPHER_128);
 m_des   = (DESKey) KeyBuilder.buildKey(KeyBuilder.TYPE_DES, KeyBuilder.LENGTH_DES3_2KEY, false);
 
-//init des key with key data from m_ramArray
+//init des key and twine cipher for encrpytion
 m_des.setKey(m_ramArray, (short) 0);
 m_twine.init(m_des, Cipher.MODE_ENCRYPT);
 
-//encrypt the data
+//encrypt 32 bytes of data
 short ret = m_twine.doFinal(m_ramArray1, (short) 0, (short) 32, apdubuf, ISO7816.OFFSET_CDATA);
 ````
 
