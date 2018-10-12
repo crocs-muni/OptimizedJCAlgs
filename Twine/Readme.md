@@ -5,12 +5,13 @@ Twine is a lightweight block cipher which utilises a 4x4 substitution box and a 
 
 ## Usage
 Twine extends the Cipher class, therefore you are able to use it the same way you would use any other block cipher, such as AES.
-The constructor is protected, therefore the only way to instantiate Twine is through the getInstance() method.\
+The constructor is protected, therefore the only way to instantiate Twine is through the getInstance() method.
 ### Interface:
-```public static TwineCipher getInstance(byte algorithm)
+```
+public static TwineCipher getInstance(byte algorithm)
 algorithm  either TWINE_CIPHER_80 or TWINE_CIPHER_128
 return     the instance of Twine cipher```
-
+```
 ```
 public short doFinal(byte[] inBuff, short inOffset, short inLength, byte[] outBuff, short outOffset)
 inBuff     input buffer
