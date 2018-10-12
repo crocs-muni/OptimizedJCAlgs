@@ -1,5 +1,15 @@
 # TWINE Cipher
 
+## Project Status
+- [x] Code is working
+- [x] Code is optimized
+- [ ] Code is beautified
+- [x] Usage info is provided
+- [x] Example is provided
+- [ ] Profiling data are collected
+- [ ] Side-channel vulnerability data are collected
+- [ ] Diploma thesis article is written
+
 ## Briefly about Twine
 Twine is a lightweight block cipher which utilises a 4x4 substitution box and a 144byte RoundKey (state). Whether you use an 80-bit or 128-bit key, it gets expanded using the substitution box into a RoundKey of the constant 144-byte length. The longer key adds more entropy to the expansion procedure and therefore more entropy to the encryption and decryption itself.
 
