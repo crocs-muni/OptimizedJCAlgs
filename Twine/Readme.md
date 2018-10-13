@@ -81,3 +81,10 @@ short ret = m_twine.doFinal(m_ramArray1, (short) 0, (short) 32, apdubuf, ISO7816
 ````
 
 ## Optimizations used
+* DESKey changed to AESKey (no impact on performance, but is more true to the nature of Twine)
+* Removed redundant arrays (RAM saving)
+* Inlined single-use private methods (faster)
+* Changed visibility of non-interface methods to package-only (safer)
+* temporary variables are now all stored in one array (faster, but not always)
+* Minimized number of method parameters (worse readability but faster)
+* Code beautification (better readability) (not complete)
