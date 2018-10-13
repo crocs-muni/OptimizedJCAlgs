@@ -6,7 +6,7 @@
 - [ ] Code is beautified
 - [x] Usage info is provided
 - [x] Example is provided
-- [ ] Profiling data are collected
+- [ ] Profiling data are collected & interpreted
 - [ ] Side-channel vulnerability data are collected
 - [ ] Diploma thesis article is written
 
@@ -88,3 +88,5 @@ short ret = m_twine.doFinal(m_ramArray1, (short) 0, (short) 32, apdubuf, ISO7816
 * temporary variables are now all stored in one array (faster, but not always)
 * Minimized number of method parameters (worse readability but faster)
 * Code beautification (better readability) (not complete)
+
+## Performance measurement results
