@@ -72,11 +72,11 @@ Simple example how to create, instantiate and use TwineCipher in the JavaCard ap
 ```` java
 //create entities
 private Cipher m_twine = null; //cipher
-private DESKey m_des = null;   //key
+private AESKey m_aes = null;   //key
 
-//instantiate the 128bit cipher and key
+//instantiate the 128bit cipher and key (note that instatiating with 80-bit key still requires 128-bit AESKey)
 m_twine = TwineCipher.getInstance(TwineCipher.TWINE_CIPHER_128);
-m_des   = (DESKey) KeyBuilder.buildKey(KeyBuilder.TYPE_DES, KeyBuilder.LENGTH_DES3_2KEY, false);
+m_des   = (AESKey) KeyBuilder.buildKey(KeyBuilder.TYPE_AES, KeyBuilder.LENGTH_AES_128, false);
 
 //init des key and twine cipher for encrpytion
 m_des.setKey(m_ramArray, (short) 0);
