@@ -70,19 +70,20 @@ throws ILLEGAL_USE        // always throws this
 ## Example
 Simple example how to create, instantiate and use TwineCipher in the JavaCard applet:
 ```` java
-//create entities
-private Cipher m_twine = null; //cipher
-private AESKey m_aes = null;   //key
+// create entities
+private Cipher m_twine = null; // cipher
+private AESKey m_aes = null;   // key
 
-//instantiate the 128bit cipher and key (note that instatiating with 80-bit key still requires 128-bit AESKey)
+// instantiate the 128-bit cipher and key
 m_twine = TwineCipher.getInstance(TwineCipher.TWINE_CIPHER_128);
-m_des   = (AESKey) KeyBuilder.buildKey(KeyBuilder.TYPE_AES, KeyBuilder.LENGTH_AES_128, false);
+m_aes   = (AESKey) KeyBuilder.buildKey(KeyBuilder.TYPE_AES, KeyBuilder.LENGTH_AES_128, false);
+// (note that instatiating with 80-bit key still requires 128-bit AESKey)
 
-//init des key and twine cipher for encrpytion
-m_des.setKey(m_ramArray, (short) 0);
-m_twine.init(m_des, Cipher.MODE_ENCRYPT);
+// init des key and twine cipher for encrpytion
+m_aes.setKey(m_ramArray, (short) 0);
+m_twine.init(m_aes, Cipher.MODE_ENCRYPT);
 
-//encrypt 32 bytes of data
+// encrypt 32 bytes of data
 short ret = m_twine.doFinal(m_ramArray1, (short) 0, (short) 32, apdubuf, ISO7816.OFFSET_CDATA);
 ````
 
