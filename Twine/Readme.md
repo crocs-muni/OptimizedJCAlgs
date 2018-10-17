@@ -20,12 +20,14 @@ The constructor is protected, therefore the only way to instantiate Twine is thr
 Create TwineCipher instance:
 ````java
 public static TwineCipher getInstance(byte algorithm)
-algorithm  // either TWINE_CIPHER_80 or TWINE_CIPHER_128
-return     // the instance of Twine cipher
+
+algorithm                 // either TWINE_CIPHER_80 or TWINE_CIPHER_128
+return                    // the instance of Twine cipher
 ````
 Initialize TwineCipher with key for encryption/decryption:
 ```` java
 public void init(Key theKey, byte theMode)
+
 theKey                    // initialized 128bit AESKey with either 80 bits or 128 bits of data
 theMode                   // either Cipher.MODE_ENCRYPT or Cipher.MODE_DECRYPT
 throws UNINITIALIZED_KEY  // if theKey wasn't properly initialized yet
@@ -34,6 +36,7 @@ throws ILLEGAL_VALUE      // if theKey is not a 128-bit AESKey
 Encrypt/decrypt supported data:
 ````java
 public short doFinal(byte[] inBuff, short inOffset, short inLength, byte[] outBuff, short outOffset)
+
 inBuff                    // input buffer
 inOffset                  // input buffer offset
 inLength                  // input buffer length
@@ -41,22 +44,25 @@ outBuff                   // output buffer
 outOffset                 // output buffer offset
 return                    // the length of processed data (same as inLength if properly executed)
 throws UNINITIALIZED_KEY  // if cipher wasn't initialized using init() method.
-throws ILLEGAL_USE        // if inLength is not a multiple of 8 (Twine is NOPAD)
+throws ILLEGAL_VALUE      // if inLength is not a multiple of 8 (Twine is NOPAD)
 ````
 Get TwineCipher algorithm tag:
 ```` java
 public byte getAlgorithm()
+
 return  ALG_TWINE         // 19
 ````
 Update (not supported):
 ```` java
 public short update(byte[] inBuff, short inOffset, short inLength, byte[] outBuff, short outOffset)
+
 throws ILLEGAL_USE        // always throws this
 // this method is not supported on lightweight Twine cipher (just use doFinal)
 ````
 Initialize with array (not supported)
 ```` java
 public void init(Key theKey, byte theMode, byte[] bArray, short bOff, short bLen)
+
 throws ILLEGAL_USE        // always throws this
 // this method is not supported on lightweight Twine cipher (use supported init)
 ````
