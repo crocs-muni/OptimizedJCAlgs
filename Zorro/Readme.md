@@ -45,7 +45,7 @@ outOffset                 // output buffer offset
 return                    // the length of processed data (same as inLength if properly executed)
 throws UNINITIALIZED_KEY  // if cipher wasn't initialized using the init() method.
 throws ILLEGAL_VALUE      // if inLength is not a multiple of 16 (because Zorro is NOPAD)
-throws    
+throws INVALID_INIT       // if mode is neither MODE_ENCRYPT nor MODE_DECRYPT
 ````
 Get ZorroCipher algorithm tag:
 ```` java
