@@ -79,8 +79,10 @@ m_twine = TwineCipher.getInstance(TwineCipher.TWINE_CIPHER_128);
 m_aes   = (AESKey) KeyBuilder.buildKey(KeyBuilder.TYPE_AES, KeyBuilder.LENGTH_AES_128, false);
 // (note that instatiating with 80-bit key still requires 128-bit AESKey)
 
-// init des key and twine cipher for encrpytion
+// set AES key
 m_aes.setKey(m_ramArray, (short) 0);
+
+// init twine Cipher before using
 m_twine.init(m_aes, Cipher.MODE_ENCRYPT);
 
 // encrypt 32 bytes of data
