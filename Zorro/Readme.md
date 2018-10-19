@@ -1,14 +1,16 @@
 # Zorro Cipher
 
+**__BE CAREFUL WHEN USING ZORRO, IT HAS BEEN BROKEN AND IS NOT SECURE__**
+
 ## Project Status
-- [ ] Code is working
+- [x] Code is working
 - [x] Code is optimized
 - [x] Code is beautified
 - [x] Usage info is provided
 - [x] Example is provided
 - [ ] Profiling data are collected & interpreted
 - [ ] Side-channel vulnerability data are collected
-- [ ] Diploma thesis article is written
+- [x] Diploma thesis article is written
 
 ## Briefly about Zorro
 Zorro is a lightweight 128-bit block cipher whose goal is to provide an AES-like encryption on JavaCards
@@ -88,6 +90,10 @@ short ret = m_zorro.doFinal(m_ramArray1, (short) 0, (short) 32, apdubuf, ISO7816
 
 ## Optimizations used
 * DESKey changed to AESKey (no impact on performance, but is more true to the nature of Zorro)
-* TODO
+* Changed visibility of non-interface methods to package-only (safer)
+* Temporary variables are now all stored in one array (faster)
+* Minimized number of method parameters (worse readability but faster)
+* Beautified code (better readability) (not complete)
+* Created proper Cipher interface
 
 ## Performance measurement results
