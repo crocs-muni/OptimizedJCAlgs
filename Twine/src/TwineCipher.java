@@ -3,7 +3,7 @@ package applets;
 import javacard.framework.JCSystem;
 import javacard.framework.Util;
 import javacard.security.CryptoException;
-import javacard.security.DESKey;
+import javacard.security.AESKey;
 import javacard.security.Key;
 import javacard.security.KeyBuilder;
 import javacardx.crypto.Cipher;
@@ -12,7 +12,18 @@ import javacardx.crypto.Cipher;
  * The TWINE Cipher implementation
  *
  * @author Alberto-PC
+ * @rewritten Max Ashwin
  * @optimized Matej Evin 27.9.2018
+ * 
+ * Fixed broken functionality
+ * Added missing functionality
+ * removed redundant ram arrays
+ * merged temp variables into an array
+ * changed DES key structure to AES
+ * Beautified code
+ * 
+ * TODO:
+ * possibly change ROTL function to arrayCopyNonAtomic logic and measure improvement
  */
 
  
@@ -50,8 +61,8 @@ import javacardx.crypto.Cipher;
     public static final byte  TWINE_CIPHER_80   = 0x30;
     public static final byte  TWINE_CIPHER_128  = 0x31;
 
-    //Key storage (make it AES?)
-    private DESKey cipherKey;
+    //Key storage
+    private AESKey cipherKey;
 
     //variables
     boolean                    isInitialized    = false;    //flag if engine is initialized with key. package-visible
@@ -61,8 +72,8 @@ import javacardx.crypto.Cipher;
     
 
     //ram arrays
-    public byte[] temp  = JCSystem.makeTransientByteArray(TEMP_LENGTH, JCSystem.CLEAR_ON_DESELECT); // temporary - for intermediate values
-    public byte[] rk    = JCSystem.makeTransientByteArray(RK_LENGTH, JCSystem.CLEAR_ON_DESELECT);     // round key - takes 288 bytes yet uses just 4 bits of each byte. Can be maybe optimized, but needs more complicated mathematic operations
+    private final byte[] temp  = JCSystem.makeTransientByteArray(TEMP_LENGTH, JCSystem.CLEAR_ON_DESELECT); // temporary - for intermediate values
+    private final byte[] rk    = JCSystem.makeTransientByteArray(RK_LENGTH,   JCSystem.CLEAR_ON_DESELECT); // round key - takes 288 bytes yet uses just 4 bits of each byte. Can be maybe optimized, but needs more complicated mathematic operations
     
     //expansion of both 80-bit and 128-bit key into Round Key
     private void keySchedule() {    
@@ -293,15 +304,21 @@ import javacardx.crypto.Cipher;
         }
 
         short i;
-        if (mode == Cipher.MODE_ENCRYPT) {
-            for (i = 0; i < (short) (inLength / 8); i++) {
-                encrypt(inBuff, (short) (i * 8 + inOffset), outBuff, (short) (i * 8 + outOffset));
-            }
-        } else {
-            for (i = 0; i < (short) (inLength / 8); i++) {
-                decrypt(inBuff, (short) (i * 8 + inOffset), outBuff, (short) (i * 8 + outOffset));
-            }
+        switch (mode){
+            case MODE_ENCRYPT:
+                for (i = 0; i < (short) (inLength / 8); i++) {
+                    encrypt(inBuff, (short) (i * 8 + inOffset), outBuff, (short) (i * 8 + outOffset));
+                }
+                break;
+            case MODE_DECRYPT:
+                for (i = 0; i < (short) (inLength / 8); i++) {
+                    decrypt(inBuff, (short) (i * 8 + inOffset), outBuff, (short) (i * 8 + outOffset));
+                }
+                break;
+            default:
+                throw new CryptoException(CryptoException.INVALID_INIT);        
         }
+        
         Util.arrayFillNonAtomic(temp, (short) 0, TEMP_LENGTH, (byte) 0);
         
         return inLength;
@@ -314,12 +331,12 @@ import javacardx.crypto.Cipher;
         }
 
         //DESKey is always 128 bit
-        if (theKey.getSize() != 128 || theKey.getType() != KeyBuilder.TYPE_DES) {
+        if (theKey.getSize() != KeyBuilder.LENGTH_AES_128 || theKey.getType() != KeyBuilder.TYPE_AES) {
             throw new CryptoException(CryptoException.ILLEGAL_VALUE);
         }
 
         mode = theMode;
-        cipherKey = (DESKey) theKey;
+        cipherKey = (AESKey) theKey;
 
         //extract the key itself, store temporarily in second half of temp array
         cipherKey.getKey(temp, TEMP_HALF);
@@ -337,12 +354,12 @@ import javacardx.crypto.Cipher;
 
     @Override
     public short update(byte[] inBuff, short inOffset, short inLength, byte[] outBuff, short outOffset) throws CryptoException {
-        throw new CryptoException(CryptoException.INVALID_INIT);
+        throw new CryptoException(CryptoException.ILLEGAL_USE);
     }
 
     @Override
     public void init(Key theKey, byte theMode, byte[] bArray, short bOff, short bLen) throws CryptoException {
-        throw new CryptoException(CryptoException.INVALID_INIT);
+        throw new CryptoException(CryptoException.ILLEGAL_USE);
     }
 
     //  END OF INTERFACE  //

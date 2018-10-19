@@ -5,8 +5,11 @@
  */
 package applets;
 
-import javacard.framework.*;
-import javacard.security.DESKey;
+import javacard.framework.APDU;
+import javacard.framework.ISO7816;
+import javacard.framework.ISOException;
+import javacard.framework.JCSystem;
+import javacard.security.AESKey;
 import javacard.security.KeyBuilder;
 import javacardx.crypto.Cipher;
 
@@ -29,12 +32,17 @@ public class TwineApplet extends javacard.framework.Applet
     //Error codes
     final static short SW_OBJECT_NOT_AVAILABLE      = (short) 0x6711;
 
-    private TwineCipher m_twine = null;           //message digest
-    private DESKey m_des = null;
+    private Cipher m_twine = null;
+    private AESKey m_aes   = null;
         
     // TEMPORARRY ARRAY IN RAM
     private byte m_ramArray1[] = null;
-    private byte m_ramArray2[] = null;
+    
+    private final byte[] TWINE_KEY = {
+        (byte) 0x00, (byte) 0x11, (byte) 0x22, (byte) 0x33,
+        (byte) 0x44, (byte) 0x55, (byte) 0x66, (byte) 0x77,
+        (byte) 0x88, (byte) 0x99, (byte) 0xAA, (byte) 0xBB,
+        (byte) 0xCC, (byte) 0xDD, (byte) 0xEE, (byte) 0xFF };
 
     /**
      * AegisApplet constructor
@@ -55,60 +63,38 @@ public class TwineApplet extends javacard.framework.Applet
             // finally shift to Application specific offset
             dataOffset += (short)( 1 + buffer[dataOffset]);
 
-           // go to proprietary data
+            // go to proprietary data
             dataOffset++;
 
             // TEMPORARY BUFFER USED FOR FAST OPERATION WITH MEMORY LOCATED IN RAM
             m_ramArray1 = JCSystem.makeTransientByteArray((short) 0xff, JCSystem.CLEAR_ON_DESELECT);
-            m_ramArray2 = JCSystem.makeTransientByteArray((short) 0xff, JCSystem.CLEAR_ON_DESELECT);
 
+            // prepare key
+            m_aes = (AESKey) KeyBuilder.buildKey(KeyBuilder.TYPE_AES, KeyBuilder.LENGTH_AES_128, false);
+            m_aes.setKey(TWINE_KEY, (short) 0);
+            
+            // prepare cipher engine
             m_twine = TwineCipher.getInstance(TwineCipher.TWINE_CIPHER_128);
-            m_des = (DESKey) KeyBuilder.buildKey(KeyBuilder.TYPE_DES, KeyBuilder.LENGTH_DES3_2KEY, false);
 
             // update flag
             isOP2 = true;
 
         } else {}
-            register();
+        register();
     }
 
-    /**
-     * Method installing the applet.
-     * @param bArray the array containing installation parameters
-     * @param bOffset the starting offset in bArray
-     * @param bLength the length in bytes of the data parameter in bArray
-     */
     public static void install(byte[] bArray, short bOffset, byte bLength) throws ISOException
     {
-        // no parameters needed
         new TwineApplet(bArray, bOffset, bLength);
     }
 
-    /**
-     * Select method returns true if applet selection is supported.
-     * @return boolean status of selection.
-     */
     public boolean select()
     {
-        // <PUT YOUR SELECTION ACTION HERE>
         return true;
     }
 
-    /**
-     * Deselect method called by the system in the deselection process.
-     */
-    public void deselect()
-    {
-        // <PUT YOUR DESELECTION ACTION HERE>
-        return;
-    }
+    public void deselect() { }
 
-    /**
-     * Method processing an incoming APDU.
-     * @see APDU
-     * @param apdu the incoming APDU
-     * @exception ISOException with the response bytes defined by ISO 7816-4
-     */
     public void process(APDU apdu) throws ISOException
     {
         // get the APDU buffer
@@ -140,30 +126,13 @@ public class TwineApplet extends javacard.framework.Applet
     public void Twine_encrypt(APDU apdu){
         byte[]    apdubuf = apdu.getBuffer();
         short     dataLen = apdu.setIncomingAndReceive();
-
-        m_ramArray1[0] = (byte) 0x00;
-        m_ramArray1[1] = (byte) 0x11;
-        m_ramArray1[2] = (byte) 0x22;
-        m_ramArray1[3] = (byte) 0x33;
-        m_ramArray1[4] = (byte) 0x44;
-        m_ramArray1[5] = (byte) 0x55;
-        m_ramArray1[6] = (byte) 0x66;
-        m_ramArray1[7] = (byte) 0x77;
-        m_ramArray1[8] = (byte) 0x88;
-        m_ramArray1[9] = (byte) 0x99;
-        m_ramArray1[10] = (byte) 0xAA;
-        m_ramArray1[11] = (byte) 0xBB;
-        m_ramArray1[12] = (byte) 0xCC;
-        m_ramArray1[13] = (byte) 0xDD;
-        m_ramArray1[14] = (byte) 0xEE;
-        m_ramArray1[15] = (byte) 0xFF;
-
-        //init des key
-        if (!m_des.isInitialized())
-            m_des.setKey(m_ramArray1, (short) 0);
         
-        if (!m_twine.isInitialized)
-            m_twine.init(m_des, Cipher.MODE_ENCRYPT);
+        // initiate Twine cipher
+        m_twine.init(m_aes, Cipher.MODE_ENCRYPT);
+        
+        //test vectors:
+        //3a 8a 2c 2b 2d d5 4e d2 <- 80bit key
+        //97 9f f9 b3 79 b5 a9 b8 <- 128bit key
         
         //plaintext
         m_ramArray1[0] = (byte) 0x01;
@@ -176,7 +145,6 @@ public class TwineApplet extends javacard.framework.Applet
         m_ramArray1[7] = (byte) 0xef;
         
         
-        //Util.arrayCopyNonAtomic(apdubuf, ISO7816.OFFSET_CDATA, m_ramArray1, (short) 0, dataLen);
         short ret = m_twine.doFinal(m_ramArray1, (short) 0, (short) 8, apdubuf, ISO7816.OFFSET_CDATA);
         
         // SEND OUTGOING BUFFER
