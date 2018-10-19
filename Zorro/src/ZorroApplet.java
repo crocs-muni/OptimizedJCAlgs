@@ -73,7 +73,6 @@ public class ZorroApplet extends javacard.framework.Applet
             m_aes.setKey(ZORRO_KEY, (short) 0);
             
             m_zorro = ZorroCipher.getInstance();
-            m_zorro.init(m_aes, Cipher.MODE_ENCRYPT);
 
             // update flag
             isOP2 = true;
@@ -125,6 +124,8 @@ public class ZorroApplet extends javacard.framework.Applet
     public void Zorro_encrypt(APDU apdu){
         byte[]    apdubuf = apdu.getBuffer();
         short     dataLen = apdu.setIncomingAndReceive();
+        
+        m_zorro.init(m_aes, Cipher.MODE_ENCRYPT);
         
         //test vector:
         // key: 00 11 22 33 44 55 66 77 88 99 aa bb cc dd ee ff
