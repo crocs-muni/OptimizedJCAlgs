@@ -3,7 +3,7 @@
 ## Project Status
 - [x] Code is working
 - [x] Code is optimized
-- [ ] Code is beautified
+- [x] Code is beautified
 - [x] Usage info is provided
 - [x] Example is provided
 - [ ] Profiling data are collected & interpreted
