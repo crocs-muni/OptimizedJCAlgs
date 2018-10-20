@@ -3,7 +3,7 @@ Collection of open-source JavaCard crypto algorithms. Optimized for memory and s
 
 ### List of known JC crypto algs on GitHub:
 * Elliptic curves: [JCMathLib](https://github.com/OpenCryptoProject/JCMathLib)
-* Sha3 (Keccak): [JCSha3](https://github.com/MiragePV/JCSha3) (Pretty slow, SHAKE not done yet)
+* Sha3 (Keccak): [JCSha3](https://github.com/MiragePV/JCSha3), [OptimizedJCAlgs](https://github.com/MiragePV/OptimizedJCAlgs) (Discontinued on JCSha3, continuing here; SHAKE not done yet)
 * [JCSWAlgs](https://github.com/JavaCardSpot-dev/JCSWAlgs) (don't blindly trust the code there)
   * Sha3
   * Sha512
