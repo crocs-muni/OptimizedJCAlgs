@@ -12,30 +12,12 @@
 - [x] Diploma thesis article is written
 
 ## Briefly about Sha3
-
+SHA-3 is the new hashing standard approved in 2015. It doesn't serve as a replacement for SHA-2, raher serves as an alternative since it uses quite different computation than SHA-1 and SHA-2 do. It's reasonably fast while providing great security. It also provides Extensible Output Functions that allows users to get output of arbitrary length (not implemented here, yet). 
 ## Usage
-Sha3 extends the MessageDigest class, therefore you are able to use it the same way you would use any other message digest algorithm.
+SHA-3 extends the MessageDigest class, therefore you are able to use it the same way you would use any other message digest algorithm.
 The constructor is protected, therefore the only way to instantiate Sha3 is through the getInstance() method.
 ### Interface:
-# TWINE Cipher
-
-## Project Status
-- [x] Code is working
-- [x] Code is optimized
-- [x] Code is beautified
-- [x] Usage info is provided
-- [x] Example is provided
-- [ ] Profiling data are collected & interpreted
-- [ ] Side-channel vulnerability data are collected
-- [x] Diploma thesis article is written
-
-## Briefly about Twine
-Twine is a lightweight block cipher which utilises a 4x4 substitution box and a 144byte RoundKey (state). Whether you use an 80-bit or 128-bit key, it gets expanded using the substitution box into a RoundKey of the constant 144-byte length. The longer key adds more entropy to the expansion procedure and therefore more entropy to the encryption and decryption itself.
-## Usage
-Twine extends the Cipher class, therefore you are able to use it the same way you would use any other block cipher, such as AES.
-The constructor is protected, therefore the only way to instantiate Twine is through the getInstance() method.
-### Interface:
-Create TwineCipher instance:
+Create SHA-3 instance:
 ````java
 public static Sha3Core getInstance(byte algorithm)
 
