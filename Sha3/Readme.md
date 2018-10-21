@@ -3,10 +3,10 @@
 ## Project Status
 - [x] Code is working
 - [ ] SHAKE is implemented (optional)
-- [ ] Code is optimized
+- [x] Code is optimized
 - [x] Code is beautified
-- [ ] Usage info is provided
-- [ ] Example is provided
+- [x] Usage info is provided
+- [x] Example is provided
 - [ ] Profiling data are collected & interpreted
 - [ ] Side-channel vulnerability data are collected
 - [x] Diploma thesis article is written
@@ -19,7 +19,7 @@ The constructor is protected, therefore the only way to instantiate Sha3 is thro
 ### Interface:
 Create SHA-3 instance:
 ````java
-public static Sha3Core getInstance(byte algorithm)
+public static Sha3 getInstance(byte algorithm)
 
 algorithm                 // ALG_SHA3_224 or ALG_SHA3_256 or ALG_SHA3_384 or ALG_SHA3_512
 return                    // the instance of SHA-3 engine
@@ -67,7 +67,7 @@ return                    // 28 or 32 or 48 or 64
 private   MessageDigest m_sha3 = null;
 
 // instantiate 256-bit algorithm
-m_sha3 = Sha3Core.getInstance(Sha3Core.ALG_SHA3_256);
+m_sha3 = Sha3.getInstance(Sha3.ALG_SHA3_256);
 
 // digest 17 bytes of data
 short ret1 = m_sha3.doFinal(m_ramArray1, (short) 0, (short) 17, apdubuf, (short) 0);
