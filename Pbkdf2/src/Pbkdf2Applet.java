@@ -26,7 +26,7 @@ public class Pbkdf2Applet extends javacard.framework.Applet
     //Error codes
     final static short SW_OBJECT_NOT_AVAILABLE      = (short) 0x6711;
 
-    private   PBKDF2Core   m_pbkdf2 = null;           //message digest
+    private   PBKDF2  m_pbkdf2 = null;           //message digest
         
     // TEMPORARRY ARRAY IN RAM
     private byte m_ramArray1[] = null;
@@ -65,8 +65,7 @@ public class Pbkdf2Applet extends javacard.framework.Applet
             m_ramArray2 = JCSystem.makeTransientByteArray((short) 0xff, JCSystem.CLEAR_ON_DESELECT);
             m_ramArray3 = JCSystem.makeTransientByteArray((short) 0xff, JCSystem.CLEAR_ON_DESELECT);
 
-            m_pbkdf2 = new PBKDF2Core();
-            m_pbkdf2.getInstance(PBKDF2Core.ALG_SHA);
+            m_pbkdf2 = PBKDF2.getInstance(PBKDF2.ALG_SHA);
 
             // update flag
             isOP2 = true;
@@ -164,8 +163,8 @@ public class Pbkdf2Applet extends javacard.framework.Applet
         //Util.arrayCopyNonAtomic(apdubuf, ISO7816.OFFSET_CDATA, m_ramArray1, (short) 0, dataLen);
         short ret = m_pbkdf2.doFinal(m_ramArray1, (short) 0, (short) 8,
                                      m_ramArray2, (short) 0, (short) 4,
-                                     (short) 4096,
-                                     m_ramArray3, (short) 0, (short) 20);
+                                     (short) 1,
+                                     m_ramArray3, (short) 0);
         
         // SEND OUTGOING BUFFER
         Util.arrayCopyNonAtomic(m_ramArray3, (short) 0, apdubuf, ISO7816.OFFSET_CDATA, ret);
