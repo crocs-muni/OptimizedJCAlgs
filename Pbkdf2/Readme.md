@@ -30,7 +30,10 @@ throws NO_SUCH_ALGORITHM  // if input algorithm is different
 ````
 Compute key:
 ````java
-public short doFinal(byte[] password, short passwordOffset, short passwordLength, byte[] salt, short saltOffset, short saltLength, short iterations, byte[] out, short outOffset)
+public short doFinal(byte[] password, short passwordOffset, short passwordLength,
+                     byte[] salt,     short saltOffset,     short saltLength,
+                     short iterations,
+                     byte[] out,      short outOffset)
 
 password                  // password to make key from
 passwordOffset            // password buffer offset
