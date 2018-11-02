@@ -6,7 +6,7 @@
 - [x] Code is beautified
 - [x] Usage info is provided
 - [x] Example is provided
-- [ ] Profiling data are collected & interpreted
+- [x] Profiling data are collected & interpreted
 - [ ] Side-channel vulnerability data are collected
 - [ ] Diploma thesis article is written
 
@@ -71,3 +71,24 @@ short ret = m_pbkdf2.doFinal(m_ramArray1, (short) 0, (short) 8, m_ramArray2, (sh
 * Added hardware HMAC possibility, which is much faster, but it may not work on all cards
 
 ## Performance measurement results
+PBKDF2 using HMAC_SHA1 with input data: "password" and "salt", with 512 iterations:
+```
+invoke doFinal:     0 ms
+first HMAC invoke:  7 ms
+  if statement:     1 ms
+  XOR+ arrayCopy:  26 ms
+  hash:             3 ms
+  copy array:       5 ms
+out of hmac:        7 ms
+
+511 hmacs:      23296 ms
+
+one hmac avg:     ~45 ms
+```
+PBKDF2 using HMAC_SHA256 with same input:
+```
+512 hmacs:      28350 ms
+
+one hmac avg:     ~55 ms
+```
+We see that if we wanted to comply with Kerberos' HMAC_SHA256 with 4096 iterations, it would take at least 3 minutes and 47 seconds.
