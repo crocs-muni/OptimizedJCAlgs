@@ -76,7 +76,7 @@ PBKDF2 using HMAC_SHA1 with input data: "password" and "salt", with 512 iteratio
 invoke doFinal:     0 ms
 first HMAC invoke:  7 ms
   if statement:     1 ms
-  XOR+ arrayCopy:  26 ms
+  XOR + arrayCopy: 26 ms
   hash:             3 ms
   copy array:       5 ms
 out of hmac:        7 ms
