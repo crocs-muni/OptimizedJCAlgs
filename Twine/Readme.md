@@ -6,7 +6,7 @@
 - [x] Code is beautified
 - [x] Usage info is provided
 - [x] Example is provided
-- [ ] Profiling data are collected & interpreted
+- [x] Profiling data are collected & interpreted
 - [ ] Side-channel vulnerability data are collected
 - [x] Diploma thesis article is written
 
@@ -99,3 +99,31 @@ short ret = m_twine.doFinal(m_ramArray1, (short) 0, (short) 32, apdubuf, ISO7816
 * Code beautification (better readability) (not complete)
 
 ## Performance measurement results
+
+Old Twine with 80-bit key schedule (not working properly):
+```
+init:               7 ms
+doFinal:
+   getKey (DES):    3 ms
+   expand key:    241 ms
+   arrayCopy:       0 ms
+   encrypt:       356 ms
+   null fields:     2 ms
+
+init total:         7 ms
+Encrypt total:   ~600 ms
+```
+New Twine with 80-bit key schedule:
+```
+init total:       309 ms (getKey & expand 80-bit key is here)
+Encrypt total:    355 ms (only encryption itself)
+```
+New Twine 128-bit key schedule:
+```
+init total:       391 ms (getKey & expand 128-bit key is here)
+Encrypt total:    354 ms (only encryption itself)
+```
+The reason why new 80-bit key schedule lasts longer than the onld one is because the original was not working properly - it missed some steps. Adding those steps to fix key schedule means longer computation time. Also, some optimizations to reduce RAM usage might cause a slight increase in computation time.
+
+The main point is, however, that we moved getKey() and keySchedule() into the init() function. init() is called only once, so we rather have longer init while any subsequent doFinal() call is much quicker.
+Old TWINE would encrypt 64 bits in 600 ms every time, our new TWINE makes it in 355 ms on average. That's a 41% speed increase.
