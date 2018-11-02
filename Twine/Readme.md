@@ -127,3 +127,4 @@ The reason why new 80-bit key schedule lasts longer than the onld one is because
 
 The main point is, however, that we moved getKey() and keySchedule() into the init() function. init() is called only once, so we rather have longer init while any subsequent doFinal() call is much quicker.
 Old TWINE would encrypt 64 bits in 600 ms every time, our new TWINE makes it in 355 ms on average. That's a 41% speed increase.
+Even more, the old Twine only accepted 64 bits of data. This meant sending APDUs over and over when we wanted to encrypt more data, taking 600+ ms every time (discounting apdu management time!). New Twine can encrypt any number of 64-bit blocks all at once, where init takes 300-400ms, and then every 64-bit block takes only 355 ms.
