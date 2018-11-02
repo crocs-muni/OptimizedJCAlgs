@@ -8,7 +8,7 @@
 - [x] Code is beautified
 - [x] Usage info is provided
 - [x] Example is provided
-- [ ] Profiling data are collected & interpreted
+- [x] Profiling data are collected & interpreted
 - [ ] Side-channel vulnerability data are collected
 - [x] Diploma thesis article is written
 
@@ -97,3 +97,21 @@ short ret = m_zorro.doFinal(m_ramArray1, (short) 0, (short) 32, apdubuf, ISO7816
 * Created proper Cipher interface
 
 ## Performance measurement results
+
+New Zorro encrypting 16 bytes of data:
+```
+init:               7 ms
+
+getKey:             2 ms
+Encrypt:
+  xor key:          4 ms
+  mixColumn:       22 ms
+  mix4Columns:     80 ms
+  one round:       93 ms
+  four rounds:    375 ms
+  24 rounds:     2232 ms
+
+encrypt:         2259 ms
+cleanup:            4 ms
+```
+We see that whole encryption takes around 2250 ms. This is split into 6 steps, each containing 4 rounds. Each step lasts 375 ms. Each round lasts 93 ms, split into 4 functions: SubBytes, AddConstant and ShiftRows last together about 13 ms, where MixColumns itself lasts 80 ms. In MixColumns, there are 4 identical steps, each lasting about 20-22 ms. Each step is 16 multiplications over Galois field (mGF). Each multiplication is over 1 ms long. Since we perform ``16 x 4 x 4 x 6 = 1546`` multiplications, the computation can't last less than that many milliseconds. All other computations also take some time (although that's only a small portion), resulting in an average 2250 ms long computation. So mGF is what takes so long and cannot be further optimized.
