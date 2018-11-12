@@ -8,7 +8,7 @@
 - [x] Example is provided
 - [x] Profiling data are collected & interpreted
 - [ ] Side-channel vulnerability data are collected
-- [ ] Diploma thesis article is written
+- [x] Diploma thesis article is written
 
 ## Briefly about PBKDF2
 Password-Based Key Derivation Function 2 is exactly how it sounds. You provide a password+salt, and it will spit out a strong cryptographic key.
