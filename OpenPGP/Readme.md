@@ -31,5 +31,6 @@ AID: D2760001240102000000000000010000
 * Simplified conditional logic
 * Simplified structure
 * Removed all possible getters/setters
+* Fixed some incorrect constants
 
 ## Performance measurement results
