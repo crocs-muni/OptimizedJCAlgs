@@ -27,5 +27,9 @@ AID: D2760001240102000000000000010000
 ## Optimizations used
 * Inlined single-use private methods
 * Minimized number of method parameters
+* Changed some redundant function calls to constant values
+* Simplified conditional logic
+* Simplified structure
+* Removed all possible getters/setters
 
 ## Performance measurement results
