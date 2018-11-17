@@ -17,8 +17,8 @@ OpenPGP is an open-source implementation of the PGP protocol. PGP allows users t
 The complete usage instructions can be found on GnuPG page:
 https://www.gnupg.org/howtos/card-howto/en/ch01.html
 
-To use this applet with GnuPG, use this PKG and AID when building a .cap file:
-PKG: D27600012401
+To use this applet with GnuPG, use this PKG and AID when building a .cap file: /br
+PKG: D27600012401 /br
 AID: D2760001240102000000000000010000
 
 ## Example
