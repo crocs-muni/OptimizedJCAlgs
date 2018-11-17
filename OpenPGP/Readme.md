@@ -4,8 +4,8 @@
 - [x] Code is working
 - [x] Code is optimized
 - [x] Code is beautified
-- [ ] Usage info is provided
-- [ ] Example is provided
+- [X] Usage info is provided
+- [X] Example is provided
 - [ ] Profiling data are collected & interpreted
 - [ ] Side-channel vulnerability data are collected
 - [x] Diploma thesis article is written
