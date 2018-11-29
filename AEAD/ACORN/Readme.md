@@ -42,4 +42,5 @@ finalize encryption:            2 ms
 
 Total:                      64649 ms
 ```
-Speed gain is roughly 4%. Memory footprint, however, is much smaller for optimized version. We cut 1536 bytes of EEPROM and several RAM arrays. Capsize is slightly smaller too.
+Speed gain is roughly 4%. Memory footprint, however, is much smaller for optimized version. We cut 1536 bytes of EEPROM and several RAM arrays. Capsize is slightly smaller too.\
+Also, much more code was moved to initialization process, so subsequent uses of acorn would take substantially less time (about 40 seconds, instead of 62), which is ~33% speed gain.
