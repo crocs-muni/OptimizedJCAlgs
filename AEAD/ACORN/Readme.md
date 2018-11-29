@@ -10,7 +10,7 @@
  * removed 1536 writes into EEPROM (this is huge)
  * changed visibility
 
-## Profiling:\
+## Profiling:
 Optimized version:
 ```
 .cap file size: 5,927 bytes
