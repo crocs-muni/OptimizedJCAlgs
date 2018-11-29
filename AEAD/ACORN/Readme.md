@@ -1,5 +1,5 @@
 Encryption process profiling data (decryption is the very similar):\
-Optimized version:\
+Optimized version:
 ```
 Until initialization:           7 ms
 initialization:             18989 ms
