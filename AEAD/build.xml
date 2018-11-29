@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="" name="AEAD">
+<!-- Applet building dependencies -->
+  <property name="JC222" value="ext/java_card_kit-2_2_2"/>
+  <property name="JC221" value="ext/java_card_kit-2_2_1"/>
+  <property name="JC212" value="ext/java_card_kit-2_1_2"/>
+  <property name="JC303" value="ext/java_card_kit-3_0_3"/>
+  <property name="OP20" value="ext/visa_openplatform-2_0"/>
+  <property name="GP211" value="ext/globalplatform-2_1_1"/>
+  
+  <!-- ant-javacard task from javacard.pro -->
+  <taskdef name="javacard" classname="pro.javacard.ant.JavaCard" classpath="ext/ant-javacard.jar"/>
+
+  <target name="acorn" description="Builds the CAP file with acorn applet example.">
+    <javacard jckit="${JC222}">
+      <cap output="_capfiles/acorn.cap" sources="Acorn/" aid="556e697454657374" >
+        <applet class="acorn.AcornApplet" aid="556e69745465737473"/>
+      </cap>
+    </javacard>
+  </target>
+  <target name="acorn_profiler" description="Builds the CAP file with acorn profiler applet.">
+    <javacard jckit="${JC222}">
+      <cap output="_capfiles/acorn_profiler.cap" sources="Acorn_profiler/" aid="556e697454657374" >
+        <applet class="acorn.AcornApplet" aid="556e69745465737473"/>
+      </cap>
+    </javacard>
+  </target>
+  <target name="aegis" description="Builds the CAP file with aegis applet example.">
+    <javacard jckit="${JC222}">
+      <cap output="_capfiles/aegis.cap" sources="Aegis/" aid="556e697454657374" >
+        <applet class="aegis.AegisApplet" aid="556e69745465737473"/>
+      </cap>
+    </javacard>
+  </target>
+  <target name="aegis_profiler" description="Builds the CAP file with aegis profiler applet.">
+    <javacard jckit="${JC222}">
+      <cap output="_capfiles/aegis_profiler.cap" sources="Aegis_profiler/" aid="556e697454657374" >
+        <applet class="aegis.AegisApplet" aid="556e69745465737473"/>
+      </cap>
+    </javacard>
+  </target>
+  <target name="ascon" description="Builds the CAP file with ascon applet example.">
+    <javacard jckit="${JC222}">
+      <cap output="_capfiles/ascon.cap" sources="Ascon/" aid="556e697454657374" >
+        <applet class="ascon.AsconApplet" aid="556e69745465737473"/>
+      </cap>
+    </javacard>
+  </target>
+  <target name="ascon_profiler" description="Builds the CAP file with ascon profiler applet.">
+    <javacard jckit="${JC222}">
+      <cap output="_capfiles/ascon_profiler.cap" sources="Ascon_profiler/" aid="556e697454657374" >
+        <applet class="ascon.AsconApplet" aid="556e69745465737473"/>
+      </cap>
+    </javacard>
+  </target>
+  <target name="cloc" description="Builds the CAP file with cloc applet example.">
+    <javacard jckit="${JC222}">
+      <cap output="_capfiles/cloc.cap" sources="Cloc/" aid="556e697454657374" >
+        <applet class="cloc.ClocApplet" aid="556e69745465737473"/>
+      </cap>
+    </javacard>
+  </target>
+  <target name="cloc_profiler" description="Builds the CAP file with cloc profiler applet.">
+    <javacard jckit="${JC222}">
+      <cap output="_capfiles/cloc_profiler.cap" sources="Cloc_profiler/" aid="556e697454657374" >
+        <applet class="cloc.ClocApplet" aid="556e69745465737473"/>
+      </cap>
+    </javacard>
+  </target>
+  <target name="morus" description="Builds the CAP file with morus applet example.">
+    <javacard jckit="${JC222}">
+      <cap output="_capfiles/morus.cap" sources="Morus/" aid="556e697454657374" >
+        <applet class="morus.MorusApplet" aid="556e69745465737473"/>
+      </cap>
+    </javacard>
+  </target>
+  <target name="morus_profiler" description="Builds the CAP file with morus profiler applet.">
+    <javacard jckit="${JC222}">
+      <cap output="_capfiles/morus_profiler.cap" sources="Morus_profiler/" aid="556e697454657374" >
+        <applet class="morus.MorusApplet" aid="556e69745465737473"/>
+      </cap>
+    </javacard>
+  </target>
+</project>
