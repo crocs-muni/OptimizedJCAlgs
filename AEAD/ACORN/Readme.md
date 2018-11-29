@@ -10,7 +10,7 @@
  * removed 1536 writes into EEPROM (this is huge)
  * changed visibility
 
-Encryption process profiling data (decryption is the very similar):\
+## Profiling:\
 Optimized version:
 ```
 .cap file size: 5,927 bytes
