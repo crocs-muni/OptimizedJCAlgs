@@ -61,11 +61,8 @@ public class Sha3 extends MessageDigest {
         (byte) 0x0a, (byte) 0x07, (byte) 0x0b, (byte) 0x11, (byte) 0x12, (byte) 0x03, (byte) 0x05, (byte) 0x10, 
         (byte) 0x08, (byte) 0x15, (byte) 0x18, (byte) 0x04, (byte) 0x0f, (byte) 0x17, (byte) 0x13, (byte) 0x0d, 
         (byte) 0x0c, (byte) 0x02, (byte) 0x14, (byte) 0x0e, (byte) 0x16, (byte) 0x09, (byte) 0x06, (byte) 0x01};
-    
-    final static byte[] ROTL_MASK1 = {
-        (byte) 0x00, (byte) 0x80, (byte) 0xC0, (byte) 0xE0, (byte) 0xF0, (byte) 0xF8, (byte) 0xFC, (byte) 0xFE};
-    
-    final static byte[] ROTL_MASK2 = {
+       
+    final static byte[] ROTL_MASK = {
         (byte) 0x00, (byte) 0x01, (byte) 0x03, (byte) 0x07, (byte) 0x0F, (byte) 0x1F, (byte) 0x3F, (byte) 0x7F};
     
     //sha3 instance
@@ -118,15 +115,15 @@ public class Sha3 extends MessageDigest {
         
         //rotate using masks
         if (shift > 0) {
-            rotl[8] = (byte)(rotl[0] & ROTL_MASK1[shift]);
-            rotl[0] = (byte)((byte)(rotl[0] << shift) | (byte)((rotl[1] >> comp) & ROTL_MASK2[shift]));
-            rotl[1] = (byte)((byte)(rotl[1] << shift) | (byte)((rotl[2] >> comp) & ROTL_MASK2[shift]));
-            rotl[2] = (byte)((byte)(rotl[2] << shift) | (byte)((rotl[3] >> comp) & ROTL_MASK2[shift]));
-            rotl[3] = (byte)((byte)(rotl[3] << shift) | (byte)((rotl[4] >> comp) & ROTL_MASK2[shift]));
-            rotl[4] = (byte)((byte)(rotl[4] << shift) | (byte)((rotl[5] >> comp) & ROTL_MASK2[shift]));
-            rotl[5] = (byte)((byte)(rotl[5] << shift) | (byte)((rotl[6] >> comp) & ROTL_MASK2[shift]));
-            rotl[6] = (byte)((byte)(rotl[6] << shift) | (byte)((rotl[7] >> comp) & ROTL_MASK2[shift]));
-            rotl[7] = (byte)((byte)(rotl[7] << shift) | (byte)((rotl[8] >> comp) & ROTL_MASK2[shift]));
+            rotl[8] = (byte)(rotl[0];
+            rotl[0] = (byte)((byte)(rotl[0] << shift) | (byte)((rotl[1] >> comp) & ROTL_MASK[shift]));
+            rotl[1] = (byte)((byte)(rotl[1] << shift) | (byte)((rotl[2] >> comp) & ROTL_MASK[shift]));
+            rotl[2] = (byte)((byte)(rotl[2] << shift) | (byte)((rotl[3] >> comp) & ROTL_MASK[shift]));
+            rotl[3] = (byte)((byte)(rotl[3] << shift) | (byte)((rotl[4] >> comp) & ROTL_MASK[shift]));
+            rotl[4] = (byte)((byte)(rotl[4] << shift) | (byte)((rotl[5] >> comp) & ROTL_MASK[shift]));
+            rotl[5] = (byte)((byte)(rotl[5] << shift) | (byte)((rotl[6] >> comp) & ROTL_MASK[shift]));
+            rotl[6] = (byte)((byte)(rotl[6] << shift) | (byte)((rotl[7] >> comp) & ROTL_MASK[shift]));
+            rotl[7] = (byte)((byte)(rotl[7] << shift) | (byte)((rotl[8] >> comp) & ROTL_MASK[shift]));
         }
     }
   
@@ -161,7 +158,7 @@ public class Sha3 extends MessageDigest {
     void keccakf(byte[] st) {
         //byte[WORDL] is the same as uint64_t
         
-        short i, j, r;      //iterators
+        short i, r;      //iterators
     
         //change endianness
         swapEndian(st);
@@ -169,44 +166,135 @@ public class Sha3 extends MessageDigest {
         for (r = 0; r < KECCAKF_ROUNDS; r++) {
     
             // Theta function (NIST.FIPS.202 page 20), sha3tiny.c line 50
-            for (i = 0; i < 5; i++) {
-                //successive XORing into state, then assigning into C
-                Util.arrayCopyNonAtomic(st, (short) (i*WORDL), bc, (short) (i*WORDL), WORDL);
-                xorWords(bc, (short) (i*WORDL), st, (short) ((i+5) *WORDL));
-                xorWords(bc, (short) (i*WORDL), st, (short) ((i+10)*WORDL));
-                xorWords(bc, (short) (i*WORDL), st, (short) ((i+15)*WORDL));
-                xorWords(bc, (short) (i*WORDL), st, (short) ((i+20)*WORDL));
-            }
+            // Successive XORing into state, then assigning into C
+            Util.arrayCopyNonAtomic(st, (short)  0, bc, (short)  0, WORDL);
+            xorWords(bc, (short)  0, st, (short)  40);
+            xorWords(bc, (short)  0, st, (short)  80);
+            xorWords(bc, (short)  0, st, (short) 120);
+            xorWords(bc, (short)  0, st, (short) 160);
+            Util.arrayCopyNonAtomic(st, (short)  8, bc, (short)  8, WORDL);
+            xorWords(bc, (short)  8, st, (short)  48);
+            xorWords(bc, (short)  8, st, (short)  88);
+            xorWords(bc, (short)  8, st, (short) 128);
+            xorWords(bc, (short)  8, st, (short) 168);
+            Util.arrayCopyNonAtomic(st, (short) 16, bc, (short) 16, WORDL);
+            xorWords(bc, (short) 16, st, (short)  56);
+            xorWords(bc, (short) 16, st, (short)  96);
+            xorWords(bc, (short) 16, st, (short) 136);
+            xorWords(bc, (short) 16, st, (short) 176);
+            Util.arrayCopyNonAtomic(st, (short) 24, bc, (short) 24, WORDL);
+            xorWords(bc, (short) 24, st, (short)  64);
+            xorWords(bc, (short) 24, st, (short) 104);
+            xorWords(bc, (short) 24, st, (short) 144);
+            xorWords(bc, (short) 24, st, (short) 184);
+            Util.arrayCopyNonAtomic(st, (short) 32, bc, (short) 32, WORDL);
+            xorWords(bc, (short) 32, st, (short)  72);
+            xorWords(bc, (short) 32, st, (short) 112);
+            xorWords(bc, (short) 32, st, (short) 152);
+            xorWords(bc, (short) 32, st, (short) 192);
             
-            for (i = 0; i < 5; i++) {
-                //sha3tiny.c line 55
-                rotlW(bc, (short) ((short) ((short) (i + 1) % 5) * WORDL), (short) 1);
-                xorWords(rotl, (short) 0, bc, (short) ((short) ((short) (i + 4) % 5) * WORDL));
-                Util.arrayCopyNonAtomic(rotl, (short) 0, t, (short) 0, WORDL);
-                for (j = 0; j < 25; j += 5)
-                    xorWords(st, (short) ((short) (i + j) * WORDL), t, (short) 0);
-            }
+            //sha3tiny.c line 55
+            rotlW(bc, (short) 8, (short) 1);
+            xorWords(rotl, (short) 0, bc, (short) 32);
+            Util.arrayCopyNonAtomic(rotl, (short) 0, t, (short) 0, WORDL);
+            xorWords(st, (short)   0, t, (short) 0);
+            xorWords(st, (short)  40, t, (short) 0);
+            xorWords(st, (short)  80, t, (short) 0);
+            xorWords(st, (short) 120, t, (short) 0);
+            xorWords(st, (short) 160, t, (short) 0);
+            rotlW(bc, (short) 16, (short) 1);
+            xorWords(rotl, (short) 0, bc, (short) 0);
+            Util.arrayCopyNonAtomic(rotl, (short) 0, t, (short) 0, WORDL);
+            xorWords(st, (short)   8, t, (short) 0);
+            xorWords(st, (short)  48, t, (short) 0);
+            xorWords(st, (short)  88, t, (short) 0);
+            xorWords(st, (short) 128, t, (short) 0);
+            xorWords(st, (short) 168, t, (short) 0);
+            rotlW(bc, (short) 24, (short) 1);
+            xorWords(rotl, (short) 0, bc, (short) 8);
+            Util.arrayCopyNonAtomic(rotl, (short) 0, t, (short) 0, WORDL);
+            xorWords(st, (short)  16, t, (short) 0);
+            xorWords(st, (short)  56, t, (short) 0);
+            xorWords(st, (short)  96, t, (short) 0);
+            xorWords(st, (short) 136, t, (short) 0);
+            xorWords(st, (short) 176, t, (short) 0);
+            rotlW(bc, (short) 32, (short) 1);
+            xorWords(rotl, (short) 0, bc, (short) 16);
+            Util.arrayCopyNonAtomic(rotl, (short) 0, t, (short) 0, WORDL);
+            xorWords(st, (short)  24, t, (short) 0);
+            xorWords(st, (short)  64, t, (short) 0);
+            xorWords(st, (short) 104, t, (short) 0);
+            xorWords(st, (short) 144, t, (short) 0);
+            xorWords(st, (short) 184, t, (short) 0);
+            rotlW(bc, (short) 0, (short) 1);
+            xorWords(rotl, (short) 0, bc, (short) 24);
+            Util.arrayCopyNonAtomic(rotl, (short) 0, t, (short) 0, WORDL);
+            xorWords(st, (short)  32, t, (short) 0);
+            xorWords(st, (short)  72, t, (short) 0);
+            xorWords(st, (short) 112, t, (short) 0);
+            xorWords(st, (short) 152, t, (short) 0);
+            xorWords(st, (short) 192, t, (short) 0);
             
             //Rho and Pi functions together (NIST.FIPS.202 page 20-22), sha3tiny line 60
             Util.arrayCopyNonAtomic(st, WORDL, t, (short) 0, WORDL);
             for (i = 0; i < 24; i++) {
-                j = KECCAKF_PILN[i];
-                Util.arrayCopyNonAtomic(st, (short) (j*WORDL), bc, (short) 0, WORDL);
+                Util.arrayCopyNonAtomic(st, (short) (KECCAKF_PILN[i] * WORDL), bc, (short) 0, WORDL);
                 rotlW(t, (short) 0, KECCAKF_ROTC[i]);
-                Util.arrayCopyNonAtomic(rotl, (short) 0, st, (short) (j*WORDL), WORDL);
-                Util.arrayCopyNonAtomic(bc,   (short) 0,  t, (short) 0,         WORDL);
+                Util.arrayCopyNonAtomic(rotl, (short) 0, st, (short) (KECCAKF_PILN[i] * WORDL), WORDL);
+                Util.arrayCopyNonAtomic(bc,   (short) 0,  t, (short) 0,                         WORDL);
             }
             
             //Chi function (NIST.FIPS.202 page 23), sha3tiny line 69
-            for (j = 0; j < 25; j+= 5) {
-                for (i = 0; i < 5; i++)
-                    Util.arrayCopyNonAtomic(st, (short) ((i+j)*WORDL), bc, (short) (i*WORDL), WORDL);
-                for (i = 0; i < 5; i++) {
-                    negateWord(t, (short) 0, bc, (short) ((short) ((short) (i + 1) % 5) * WORDL));
-                    andWords(t, (short) 0, bc, (short) ((short) ((short) (i + 2) % 5) * WORDL));
-                    xorWords(st, (short) ((j + i) * WORDL), t, (short) 0);
-                }
-            }
+            Util.arrayCopyNonAtomic(st, (short)  0, bc, (short)  0, WORDL);
+            Util.arrayCopyNonAtomic(st, (short)  8, bc, (short)  8, WORDL);
+            Util.arrayCopyNonAtomic(st, (short) 16, bc, (short) 16, WORDL);
+            Util.arrayCopyNonAtomic(st, (short) 24, bc, (short) 24, WORDL);
+            Util.arrayCopyNonAtomic(st, (short) 32, bc, (short) 32, WORDL);
+            negateWord(t, (short) 0, bc, (short)  8); andWords(t, (short) 0, bc, (short) 16); xorWords(st, (short)  0, t, (short) 0);
+            negateWord(t, (short) 0, bc, (short) 16); andWords(t, (short) 0, bc, (short) 24); xorWords(st, (short)  8, t, (short) 0);
+            negateWord(t, (short) 0, bc, (short) 24); andWords(t, (short) 0, bc, (short) 32); xorWords(st, (short) 16, t, (short) 0);
+            negateWord(t, (short) 0, bc, (short) 32); andWords(t, (short) 0, bc, (short)  0); xorWords(st, (short) 24, t, (short) 0);
+            negateWord(t, (short) 0, bc, (short)  0); andWords(t, (short) 0, bc, (short)  8); xorWords(st, (short) 32, t, (short) 0);
+            Util.arrayCopyNonAtomic(st, (short) 40, bc, (short)  0, WORDL);
+            Util.arrayCopyNonAtomic(st, (short) 48, bc, (short)  8, WORDL);
+            Util.arrayCopyNonAtomic(st, (short) 56, bc, (short) 16, WORDL);
+            Util.arrayCopyNonAtomic(st, (short) 64, bc, (short) 24, WORDL);
+            Util.arrayCopyNonAtomic(st, (short) 72, bc, (short) 32, WORDL);
+            negateWord(t, (short) 0, bc, (short)  8); andWords(t, (short) 0, bc, (short) 16); xorWords(st, (short) 40, t, (short) 0);
+            negateWord(t, (short) 0, bc, (short) 16); andWords(t, (short) 0, bc, (short) 24); xorWords(st, (short) 48, t, (short) 0);
+            negateWord(t, (short) 0, bc, (short) 24); andWords(t, (short) 0, bc, (short) 32); xorWords(st, (short) 56, t, (short) 0);
+            negateWord(t, (short) 0, bc, (short) 32); andWords(t, (short) 0, bc, (short)  0); xorWords(st, (short) 64, t, (short) 0);
+            negateWord(t, (short) 0, bc, (short)  0); andWords(t, (short) 0, bc, (short)  8); xorWords(st, (short) 72, t, (short) 0);
+            Util.arrayCopyNonAtomic(st, (short)  80, bc, (short)  0, WORDL);
+            Util.arrayCopyNonAtomic(st, (short)  88, bc, (short)  8, WORDL);
+            Util.arrayCopyNonAtomic(st, (short)  96, bc, (short) 16, WORDL);
+            Util.arrayCopyNonAtomic(st, (short) 104, bc, (short) 24, WORDL);
+            Util.arrayCopyNonAtomic(st, (short) 112, bc, (short) 32, WORDL);
+            negateWord(t, (short) 0, bc, (short)  8); andWords(t, (short) 0, bc, (short) 16); xorWords(st, (short)  80, t, (short) 0);
+            negateWord(t, (short) 0, bc, (short) 16); andWords(t, (short) 0, bc, (short) 24); xorWords(st, (short)  88, t, (short) 0);
+            negateWord(t, (short) 0, bc, (short) 24); andWords(t, (short) 0, bc, (short) 32); xorWords(st, (short)  96, t, (short) 0);
+            negateWord(t, (short) 0, bc, (short) 32); andWords(t, (short) 0, bc, (short)  0); xorWords(st, (short) 104, t, (short) 0);
+            negateWord(t, (short) 0, bc, (short)  0); andWords(t, (short) 0, bc, (short)  8); xorWords(st, (short) 112, t, (short) 0);
+            Util.arrayCopyNonAtomic(st, (short) 120, bc, (short)  0, WORDL);
+            Util.arrayCopyNonAtomic(st, (short) 128, bc, (short)  8, WORDL);
+            Util.arrayCopyNonAtomic(st, (short) 136, bc, (short) 16, WORDL);
+            Util.arrayCopyNonAtomic(st, (short) 144, bc, (short) 24, WORDL);
+            Util.arrayCopyNonAtomic(st, (short) 152, bc, (short) 32, WORDL);
+            negateWord(t, (short) 0, bc, (short)  8); andWords(t, (short) 0, bc, (short) 16); xorWords(st, (short) 120, t, (short) 0);
+            negateWord(t, (short) 0, bc, (short) 16); andWords(t, (short) 0, bc, (short) 24); xorWords(st, (short) 128, t, (short) 0);
+            negateWord(t, (short) 0, bc, (short) 24); andWords(t, (short) 0, bc, (short) 32); xorWords(st, (short) 136, t, (short) 0);
+            negateWord(t, (short) 0, bc, (short) 32); andWords(t, (short) 0, bc, (short)  0); xorWords(st, (short) 144, t, (short) 0);
+            negateWord(t, (short) 0, bc, (short)  0); andWords(t, (short) 0, bc, (short)  8); xorWords(st, (short) 152, t, (short) 0);
+            Util.arrayCopyNonAtomic(st, (short) 160, bc, (short)  0, WORDL);
+            Util.arrayCopyNonAtomic(st, (short) 168, bc, (short)  8, WORDL);
+            Util.arrayCopyNonAtomic(st, (short) 176, bc, (short) 16, WORDL);
+            Util.arrayCopyNonAtomic(st, (short) 184, bc, (short) 24, WORDL);
+            Util.arrayCopyNonAtomic(st, (short) 192, bc, (short) 32, WORDL);
+            negateWord(t, (short) 0, bc, (short)  8); andWords(t, (short) 0, bc, (short) 16); xorWords(st, (short) 160, t, (short) 0);
+            negateWord(t, (short) 0, bc, (short) 16); andWords(t, (short) 0, bc, (short) 24); xorWords(st, (short) 168, t, (short) 0);
+            negateWord(t, (short) 0, bc, (short) 24); andWords(t, (short) 0, bc, (short) 32); xorWords(st, (short) 176, t, (short) 0);
+            negateWord(t, (short) 0, bc, (short) 32); andWords(t, (short) 0, bc, (short)  0); xorWords(st, (short) 184, t, (short) 0);
+            negateWord(t, (short) 0, bc, (short)  0); andWords(t, (short) 0, bc, (short)  8); xorWords(st, (short) 192, t, (short) 0);
             
             //Iota function (NIST.FIPS.202 page 23), sha3tiny line 77
             xorWords(st, (short) 0, KECCAKF_RNDC, (short) (r * WORDL));
