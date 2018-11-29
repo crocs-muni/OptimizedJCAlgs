@@ -8,7 +8,7 @@
  * moved many parts to init
  * unrolled many loops
  
-## Profiling:
+## Profiling (16 byte input 0x00 - 0x0f):
 Optimized version:
 ```
 .cap file size: 10,347 bytes
@@ -21,6 +21,8 @@ process plaintext:            140 ms
 generate tag:                 781 ms
 
 Total:                       3558 ms
+
+(255 bytes are encrypted in 6270 ms)
 ```
 Unoptimized version:
 ```
