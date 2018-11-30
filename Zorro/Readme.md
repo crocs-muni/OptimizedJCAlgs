@@ -1,6 +1,6 @@
 # Zorro Cipher
 
-<img src="https://icon2.kisspng.com/20180626/kiy/kisspng-warning-sign-computer-icons-clip-art-warning-icon-5b31bd67368be5.4827407215299864072234.jpg" alt="Warning! " width="65" height="60">**__BE CAREFUL WHEN USING ZORRO, IT HAS BEEN BROKEN AND IS NOT SECURE__**
+<img src="http://www.stickpng.com/assets/images/5a81af7d9123fa7bcc9b0793.png" alt="Warning! " width="30">**__BE CAREFUL WHEN USING ZORRO, IT HAS BEEN BROKEN AND IS NOT SECURE__**
 
 ## Project Status
 - [x] Code is working
