@@ -26,12 +26,8 @@ public class AsconCore {
     public final static short EIGHT             = 8;
     public final static short FORTY             = 40;
     
-    
-    // Bitwise rotation masks
-    final static byte[] ROT_MASK1 = {
-        (byte) 0x00, (byte) 0x80, (byte) 0xC0, (byte) 0xE0, (byte) 0xF0, (byte) 0xF8, (byte) 0xFC, (byte) 0xFE};
-    
-    final static byte[] ROT_MASK2 = {
+    // Bitwise rotation mask
+    final static byte[] ROT_MASK = {
         (byte) 0x00, (byte) 0x01, (byte) 0x03, (byte) 0x07, (byte) 0x0F, (byte) 0x1F, (byte) 0x3F, (byte) 0x7F};
     
     private byte[] x0 = null;
@@ -87,15 +83,15 @@ public class AsconCore {
         //rotate using masks
         if (shift > 0) {
             byte comp = (byte) (8 - shift);
-            byte aux = (byte)(out[0] & ROT_MASK1[shift]);
-            out[0] = (byte)((byte)(out[0] << shift) | (byte)((out[1] >> comp) & ROT_MASK2[shift]));
-            out[1] = (byte)((byte)(out[1] << shift) | (byte)((out[2] >> comp) & ROT_MASK2[shift]));
-            out[2] = (byte)((byte)(out[2] << shift) | (byte)((out[3] >> comp) & ROT_MASK2[shift]));
-            out[3] = (byte)((byte)(out[3] << shift) | (byte)((out[4] >> comp) & ROT_MASK2[shift]));
-            out[4] = (byte)((byte)(out[4] << shift) | (byte)((out[5] >> comp) & ROT_MASK2[shift]));
-            out[5] = (byte)((byte)(out[5] << shift) | (byte)((out[6] >> comp) & ROT_MASK2[shift]));
-            out[6] = (byte)((byte)(out[6] << shift) | (byte)((out[7] >> comp) & ROT_MASK2[shift]));
-            out[7] = (byte)((byte)(out[7] << shift) | (byte)((aux    >> comp) & ROT_MASK2[shift]));
+            byte aux = out[0];
+            out[0] = (byte)((byte)(out[0] << shift) | (byte)((out[1] >> comp) & ROT_MASK[shift]));
+            out[1] = (byte)((byte)(out[1] << shift) | (byte)((out[2] >> comp) & ROT_MASK[shift]));
+            out[2] = (byte)((byte)(out[2] << shift) | (byte)((out[3] >> comp) & ROT_MASK[shift]));
+            out[3] = (byte)((byte)(out[3] << shift) | (byte)((out[4] >> comp) & ROT_MASK[shift]));
+            out[4] = (byte)((byte)(out[4] << shift) | (byte)((out[5] >> comp) & ROT_MASK[shift]));
+            out[5] = (byte)((byte)(out[5] << shift) | (byte)((out[6] >> comp) & ROT_MASK[shift]));
+            out[6] = (byte)((byte)(out[6] << shift) | (byte)((out[7] >> comp) & ROT_MASK[shift]));
+            out[7] = (byte)((byte)(out[7] << shift) | (byte)((aux    >> comp) & ROT_MASK[shift]));
         }
     }
     
