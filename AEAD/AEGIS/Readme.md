@@ -22,7 +22,7 @@ Total:                       3175 ms
 ```
 Unoptimized version:
 ```
-.cap file size: 6,005 bytes
+.cap file size: 12,889 bytes
 
 Until initialization:           8 ms
 initialization:              2334 ms
