@@ -38,10 +38,10 @@ Since CLOC uses internal AES, it is very fast. Our optimizations managed to slig
 ### RAM:
 Unoptimized version:
 ```
-380
+380 bytes
 ```
 Optimized version:
 ```
-78
+78 bytes
 ```
 380 - 78 = 302 bytes (79% smaller)
