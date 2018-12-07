@@ -8,7 +8,9 @@
  * moved many parts to init
  * unrolled many loops
  
-## Profiling (16 byte input 0x00 - 0x0f):
+## Profiling:
+
+### Speed (16 byte input 0x00 - 0x0f):
 Optimized version:
 ```
 .cap file size: 10,347 bytes
@@ -41,3 +43,12 @@ We cut the computation time from 87,7 seconds to 3,5 seconds. That is more than 
 We also moved most of the code to initialization, so subsequent runs of encrypt() would take only about 1,3 seconds.\
 Improved bitshifts and byte shifts are the main reason of this speedup.\
 The only price for this is cap being bigger by 1500 bytes, which is is completely negligible in this case.
+
+### RAM:
+```
+128 bytes
+```
+```
+128 bytes
+```
+No improvement
