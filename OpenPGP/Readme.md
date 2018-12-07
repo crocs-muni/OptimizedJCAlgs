@@ -34,6 +34,8 @@ AID: D2760001240102000000000000010000
 * Fixed some incorrect constants
 
 ## Performance measurement results
+
+### Speed:
 Unoptimized:
 ```
 initial operations:  43 ms
@@ -54,3 +56,14 @@ generate key:     33857 ms
 ```
 We see that optimizations didn't increase the speed radically, but we see a good improvement in initial setup: 43 milliseconds to 27 milliseconds. Even if this is very subtle improvement, it is faster by around 40 %.
 Quicker access to structures such as keys can be seen in all methods. The improvement is around 10 %.
+
+### RAM:
+Unoptimized:
+```
+1728 bytes
+```
+Optimized:
+```
+1728 bytes
+```
+No improvement
