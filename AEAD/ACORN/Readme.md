@@ -11,6 +11,8 @@
  * changed visibility
 
 ## Profiling:
+
+### Speed:
 Optimized version:
 ```
 .cap file size: 5,927 bytes
@@ -44,3 +46,14 @@ Total:                      64649 ms
 ```
 Speed gain is roughly 4%. Memory footprint, however, is much smaller for optimized version. We cut 1536 bytes of EEPROM and several RAM arrays. Capsize is slightly smaller too.\
 Also, much more code was moved to initialization process, so subsequent uses of acorn would take substantially less time (about 40 seconds, instead of 62), which is ~33% speed gain.
+
+### RAM:
+Unoptimized version:
+```
+602 bytes
+```
+Optimized version:
+```
+309 bytes
+```
+602 - 309 = 293 bytes (48,6% smaller)
