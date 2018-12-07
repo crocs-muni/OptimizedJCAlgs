@@ -9,7 +9,9 @@
  * moved functionality to init instead of encrypt/decrypt
 
 ## Profiling:
- Optimized version:
+
+### Speed:
+Optimized version:
 ```
 .cap file size: 7,351 bytes
 
@@ -32,3 +34,14 @@ encrypt plaintext:             30 ms
 Total:                         99 ms
 ```
 Since CLOC uses internal AES, it is very fast. Our optimizations managed to slightly improve the speed, also improved the code logic by putting more operations into init.
+
+### RAM:
+Unoptimized version:
+```
+380
+```
+Optimized version:
+```
+78
+```
+380 - 78 = 302 bytes (79% smaller)
