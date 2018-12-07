@@ -6,6 +6,8 @@
  * Changed method visibility
 
 ## Profiling:
+
+### Speed:
 Optimized version:
 ```
 .cap file size: 6,302 bytes
@@ -40,3 +42,14 @@ Total:                      22513 ms
 ```
 
 We went from 22,5 seconds to less than 3 seconds when processing 16 bytes of data. That is almost 8 times faster! Also, some arrays were removed so it takes less RAM space.
+
+### RAM:
+Unoptimized version:
+```
+128 bytes
+```
+Optimized version:
+```
+120 bytes
+```
+128 - 120 = 8 bytes (6,25% smaller)
