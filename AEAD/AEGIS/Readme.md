@@ -6,6 +6,8 @@
  * Split initialization and encryption/decryption.
 
 ## Profiling:
+
+### Speed:
 Optimized version:
 ```
 .cap file size: 12,629 bytes
@@ -36,3 +38,14 @@ Total:                       3186 ms
 ```
 
 This algorithm was well optimized for speed already, which we can see at basically identical run times. We managed to push a big part of the code to the initialization. Also, we removed some arrays so the RAM consumption is lower.
+
+### RAM:
+Unoptimized version:
+```
+208 bytes
+```
+Optimized version:
+```
+176 bytes
+```
+208 - 176 = 32 bytes (15,3% smaller)
