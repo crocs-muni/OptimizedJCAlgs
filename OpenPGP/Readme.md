@@ -7,7 +7,6 @@
 - [x] Usage info is provided
 - [x] Example is provided
 - [x] Profiling data are collected & interpreted
-- [ ] Side-channel vulnerability data are collected
 - [x] Diploma thesis article is written
 
 ## Briefly about OpenPGP
