@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project basedir="." default="pbkdf2" name="Pbkdf2Applet">
+<project basedir="." default="zorro" name="ZorroApplet">
 <!-- Applet building dependencies -->
   <property name="JC222" value="../_ext/java_card_kit-2_2_2"/>
   <property name="JC221" value="../_ext/java_card_kit-2_2_1"/>
@@ -11,20 +11,19 @@
   <!-- ant-javacard task from javacard.pro -->
   <taskdef name="javacard" classname="pro.javacard.ant.JavaCard" classpath="../_ext/ant-javacard.jar"/>
 
-  <target name="pbkdf2" description="Builds the CAP file with pbkdf2 applet example.">
+  <target name="zorro" description="Builds the CAP file with zorro cipher applet example.">
     <javacard jckit="${JC222}">
-      <cap output="_capfiles/pbkdf2.cap" sources="src/" aid="556e697454657374" >
-        <applet class="applets.Pbkdf2Applet" aid="556e69745465737473"/>
+      <cap output="_capfiles/zorro.cap" sources="src/" aid="556e697454657374" >
+        <applet class="applets.ZorroApplet" aid="556e69745465737473"/>
       </cap>
     </javacard>
   </target>
   
-    <target name="pbkdf2_profiler" description="Builds the CAP file with pbkdf2 applet with profiling.">
+  <target name="zorro_profiler" description="Builds the CAP file with zorro cipher performance profiling applet.">
     <javacard jckit="${JC222}">
-      <cap output="_capfiles/pbkdf2_profiler.cap" sources="src_profiler/" aid="556e697454657374" >
-        <applet class="applets.Pbkdf2Applet" aid="556e69745465737473"/>
+      <cap output="_capfiles/zorro_profiler.cap" sources="src_profiler/" aid="556e697454657374" >
+        <applet class="applets.ZorroApplet" aid="556e69745465737473"/>
       </cap>
     </javacard>
   </target>
-  
 </project>

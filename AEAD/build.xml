@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="" name="AEAD">
 <!-- Applet building dependencies -->
-  <property name="JC222" value="ext/java_card_kit-2_2_2"/>
-  <property name="JC221" value="ext/java_card_kit-2_2_1"/>
-  <property name="JC212" value="ext/java_card_kit-2_1_2"/>
-  <property name="JC303" value="ext/java_card_kit-3_0_3"/>
-  <property name="OP20" value="ext/visa_openplatform-2_0"/>
-  <property name="GP211" value="ext/globalplatform-2_1_1"/>
+  <property name="JC222" value="../_ext/java_card_kit-2_2_2"/>
+  <property name="JC221" value="../_ext/java_card_kit-2_2_1"/>
+  <property name="JC212" value="../_ext/java_card_kit-2_1_2"/>
+  <property name="JC303" value="../_ext/java_card_kit-3_0_3"/>
+  <property name="OP20" value="../_ext/visa_openplatform-2_0"/>
+  <property name="GP211" value="../_ext/globalplatform-2_1_1"/>
   
   <!-- ant-javacard task from javacard.pro -->
-  <taskdef name="javacard" classname="pro.javacard.ant.JavaCard" classpath="ext/ant-javacard.jar"/>
+  <taskdef name="javacard" classname="pro.javacard.ant.JavaCard" classpath="../_ext/ant-javacard.jar"/>
 
   <target name="acorn" description="Builds the CAP file with acorn applet example.">
     <javacard jckit="${JC222}">

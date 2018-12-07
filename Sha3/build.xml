@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project basedir="." default="pbkdf2" name="Pbkdf2Applet">
+<project basedir="." default="sha3" name="Sha3Applet">
 <!-- Applet building dependencies -->
   <property name="JC222" value="../_ext/java_card_kit-2_2_2"/>
   <property name="JC221" value="../_ext/java_card_kit-2_2_1"/>
@@ -11,18 +11,18 @@
   <!-- ant-javacard task from javacard.pro -->
   <taskdef name="javacard" classname="pro.javacard.ant.JavaCard" classpath="../_ext/ant-javacard.jar"/>
 
-  <target name="pbkdf2" description="Builds the CAP file with pbkdf2 applet example.">
+  <target name="sha3" description="Builds the CAP file with sha3 applet example.">
     <javacard jckit="${JC222}">
-      <cap output="_capfiles/pbkdf2.cap" sources="src/" aid="556e697454657374" >
-        <applet class="applets.Pbkdf2Applet" aid="556e69745465737473"/>
+      <cap output="_capfiles/sha3.cap" sources="src/" aid="556e697454657374" >
+        <applet class="applets.Sha3Applet" aid="556e69745465737473"/>
       </cap>
     </javacard>
   </target>
   
-    <target name="pbkdf2_profiler" description="Builds the CAP file with pbkdf2 applet with profiling.">
+    <target name="sha3_profiler" description="Builds the CAP file with sha3 profiler applet.">
     <javacard jckit="${JC222}">
-      <cap output="_capfiles/pbkdf2_profiler.cap" sources="src_profiler/" aid="556e697454657374" >
-        <applet class="applets.Pbkdf2Applet" aid="556e69745465737473"/>
+      <cap output="_capfiles/sha3_profiler.cap" sources="src_profiler/" aid="556e697454657374" >
+        <applet class="applets.Sha3Applet" aid="556e69745465737473"/>
       </cap>
     </javacard>
   </target>
