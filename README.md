@@ -10,7 +10,7 @@ See each algorithm's own readme file for more details.
   * Sha512
   * AES
   * Twine Cipher (incorrect implementation there, correct here)
-  * Zorro Cipher (correct implementation here, needs more review though)
+  * Zorro Cipher (correct implementation here, but the alg. design is not secure!)
 * [Primitives_SmartCard](https://github.com/albertocarp/Primitives_SmartCard/tree/master/src/sid)
   * Sha3
   * LBlock Cipher
