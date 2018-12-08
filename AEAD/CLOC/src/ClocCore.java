@@ -18,12 +18,6 @@ import javacardx.crypto.*;
  * removed software AES implementation
  * moved functionality to init instead of encrypt/decrypt
  * 
- * Original time: 690ms
- * Optimized time: 437ms
- * Time reduced to 63%
- * Original size 8kb
- * Optimized size 7kb
- * 
  */
 public class ClocCore {
   // Engines
