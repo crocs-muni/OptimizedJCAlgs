@@ -1,6 +1,6 @@
 # Zorro Cipher
 
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Attention_Sign.svg/1169px-Attention_Sign.svg.png" alt="Warning! " width="25">  **__BE CAREFUL WHEN USING ZORRO, IT HAS BEEN BROKEN AND IS NOT SECURE__**  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Attention_Sign.svg/1169px-Attention_Sign.svg.png" alt="Warning! " width="25">\
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Attention_Sign.svg/1169px-Attention_Sign.svg.png" alt="Warning! " width="25">  **__BE CAREFUL WHEN USING ZORRO, IT IS NOT SECURE__**  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Attention_Sign.svg/1169px-Attention_Sign.svg.png" alt="Warning! " width="25">\
 Read more here: https://eprint.iacr.org/2014/220.pdf
 
 ## Project Status
