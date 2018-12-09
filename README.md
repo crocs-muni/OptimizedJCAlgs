@@ -3,17 +3,11 @@ Collection of open-source JavaCard crypto algorithms. Optimized for memory and s
 See each algorithm's own readme file for more details.
 
 ## Featured algorithms:
-  * AEGIS
-  * ACORN
-  * ASCON
-  * CLOC
-  * MORUS
-  * SHA-3
-  * TWINE
-  * Zorro
-  * PBKDF2
-  
-  * OpenPGP applet
+* AEGIS, ACORN, ASCON, CLOC, MORUS - Authenticated Encryption
+* TWINE, Zorro - Block Ciphers
+* SHA-3 - Message Digest
+* PBKDF2 - Key derivation
+* OpenPGP - extend your GnuPG with smart card!
 
 ### List of known JC crypto algs on GitHub:
 * Elliptic curves: [JCMathLib](https://github.com/OpenCryptoProject/JCMathLib)
