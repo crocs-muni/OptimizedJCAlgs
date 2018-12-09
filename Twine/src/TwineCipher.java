@@ -22,12 +22,9 @@ import javacardx.crypto.Cipher;
  * changed DES key structure to AES
  * Beautified code
  * 
- * TODO:
- * possibly change ROTL function to arrayCopyNonAtomic logic and measure improvement
  */
 
  
- //TODO expand128 key now uses expand 80!
  public class TwineCipher extends Cipher {
 
     //TWINE-specific tables
