@@ -137,3 +137,8 @@ The new - optimized Zorro is about 100 ms faster. This is because of loop unroll
 We see that whole encryption takes around 2250 ms. This is split into 6 steps, each containing 4 rounds. Each step lasts 375 ms. Each round lasts 93 ms, split into 4 functions: SubBytes, AddConstant and ShiftRows last together about 13 ms, where MixColumns itself lasts 80 ms. In MixColumns, there are 4 identical steps, each lasting about 20-22 ms. Each step is 16 multiplications over Galois field (mGF). Each multiplication is over 1 ms long. Since we perform ``16 x 4 x 4 x 6 = 1546`` multiplications, the computation can't last less than that many milliseconds. All other computations also take some time (although that's only a small portion), resulting in an average 2250 ms long computation. So mGF is what takes so long and cannot be further optimized.
 
 ### Memory
+
+```
+40 bytes
+```
+Zorro only needs 40 bytes to save the state. Nothing more.
