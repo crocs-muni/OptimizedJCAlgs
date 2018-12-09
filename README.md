@@ -2,7 +2,7 @@
 Collection of open-source JavaCard crypto algorithms. Optimized for memory and speed with unified interface (where possible).
 See each algorithm's own readme file for more details.
 
-## Featured algorithms:
+### Featured algorithms:
 * AEGIS, ACORN, ASCON, CLOC, MORUS - Authenticated Encryption
 * TWINE, Zorro - Block Ciphers
 * SHA-3 - Message Digest
