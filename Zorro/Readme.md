@@ -10,8 +10,8 @@ Read more here: https://eprint.iacr.org/2014/220.pdf
 - [x] Usage info is provided
 - [x] Example is provided
 - [x] Speed profiling data are collected & interpreted
-- [ ] Memory profiling data are collected & interpreted
-- [ ] Side-channel vulnerability data are collected
+- [x] Memory profiling data are collected & interpreted
+- [x] Side-channel vulnerability data are collected
 - [x] Diploma thesis article is written
 
 ## Briefly about Zorro
