@@ -2,6 +2,19 @@
 Collection of open-source JavaCard crypto algorithms. Optimized for memory and speed with unified interface (where possible).
 See each algorithm's own readme file for more details.
 
+## Featured algorithms:
+  * AEGIS
+  * ACORN
+  * ASCON
+  * CLOC
+  * MORUS
+  * SHA-3
+  * TWINE
+  * Zorro
+  * PBKDF2
+  
+  * OpenPGP applet
+
 ### List of known JC crypto algs on GitHub:
 * Elliptic curves: [JCMathLib](https://github.com/OpenCryptoProject/JCMathLib)
 * Sha3 (Keccak): [JCSha3](https://github.com/MiragePV/JCSha3), [OptimizedJCAlgs](https://github.com/MiragePV/OptimizedJCAlgs) (Discontinued on JCSha3, continuing here; SHAKE not done yet)
@@ -24,7 +37,7 @@ See each algorithm's own readme file for more details.
   * MORUS
 * [OpenPGP](https://github.com/jderuiter/javacard-openpgpcard) - open source PGP on JC
 * [LedgerHQ Wallet](https://github.com/LedgerHQ/ledger-javacard) - implementation of Ledger cryptocurrency wallet on JC
-* Password-based key derivation: [OptimizedJCAlgs](https://github.com/MiragePV/OptimizedJCAlgs) - this project, unoptimized (yet)
+* Password-based key derivation: [OptimizedJCAlgs](https://github.com/MiragePV/OptimizedJCAlgs)
   * PBKDF2 (Sha1, Sha256; single-block, 128-bit salt) (pretty slow)
 
 Profiling and optimization tools:
