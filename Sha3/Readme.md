@@ -7,8 +7,8 @@
 - [x] Code is beautified
 - [x] Usage info is provided
 - [x] Example is provided
-- [ ] Profiling data are collected & interpreted
-- [ ] Side-channel vulnerability data are collected
+- [x] Profiling data are collected & interpreted
+- [x] Side-channel vulnerability data are collected
 - [x] Diploma thesis article is written
 
 ## Briefly about Sha3
@@ -81,9 +81,33 @@ short ret1 = m_sha3.doFinal(m_ramArray1, (short) 0, (short) 17, apdubuf, (short)
 * Beautified code (better readability)
 * Created proper MessageDigest interface
 
-## Performance measurement results
+## Measurement results
 
-## Possible further optimizations
-* Inline some functions
-* Rewrite code so that we don't have to swap endianess
-* cast to short when XOR, AND, NOT to compute those operations twice as fast
+### Speed
+Unrolled for loops:
+```
+init:                       17 ms
+swap endian:                16 ms
+theta (arrayCopy and XOR):  25 ms
+theta (copy, XOR, rotlW):   59 ms
+rho+pi (24x rotlW):        112 ms
+chi (copy and negate):      96 ms
+swap endian:                22 ms
+Keccakf (24 rounds):      6746 ms
+```
+Classic for loops:
+```
+init:                       18 ms
+swap endian:                15 ms
+theta (arrayCopy and XOR):  27 ms
+theta (copy, XOR, rotlW):   58 ms
+rho+pi (24x rotlW):        110 ms
+chi (copy and negate):      99 ms
+swap endian:                19 ms
+Keccakf (24 rounds):      6813 ms 
+```
+### RAM
+
+```
+257 bytes
+```
