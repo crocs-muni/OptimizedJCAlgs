@@ -122,7 +122,7 @@ public class Sha3 extends MessageDigest {
         
         //rotate using masks
         if (shift > 0) {
-            rotl[8] = (byte)(rotl[0];
+            rotl[8] = (byte)(rotl[0]);
             rotl[0] = (byte)((byte)(rotl[0] << shift) | (byte)((rotl[1] >> comp) & ROTL_MASK[shift]));
             rotl[1] = (byte)((byte)(rotl[1] << shift) | (byte)((rotl[2] >> comp) & ROTL_MASK[shift]));
             rotl[2] = (byte)((byte)(rotl[2] << shift) | (byte)((rotl[3] >> comp) & ROTL_MASK[shift]));
