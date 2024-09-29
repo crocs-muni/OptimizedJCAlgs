@@ -10,10 +10,14 @@ import javacard.security.MessageDigest;
  * 6th March 2018
  * 
  * Optimized bit-shift as much as possible, added 16 bytes of lookup table into EEPROM
- * 
+ *
+ * 27th September 2024
+ *
+ * Added Shake
+ *
  */
  
-public class Sha3 extends MessageDigest {
+public class Keccak extends MessageDigest {
     
     //Defines
     public static final short   KECCAKF_ROUNDS      = (short)  24;
@@ -29,6 +33,9 @@ public class Sha3 extends MessageDigest {
     public final static byte    ALG_KECCAK_256      = (byte)   12;
     public final static byte    ALG_KECCAK_384      = (byte)   13;
     public final static byte    ALG_KECCAK_512      = (byte)   14;
+
+    public final static byte    ALG_SHAKE_128       = (byte)   15;
+    public final static byte    ALG_SHAKE_256       = (byte)   16;
     
     //* this stuff is in big endian!
     final static byte[] KECCAKF_RNDC = {
@@ -70,15 +77,15 @@ public class Sha3 extends MessageDigest {
     final static byte[] ROTL_MASK = {
         (byte) 0x00, (byte) 0x01, (byte) 0x03, (byte) 0x07, (byte) 0x0F, (byte) 0x1F, (byte) 0x3F, (byte) 0x7F};
     
-    //sha3 instance
-    private static Sha3  m_instance = null;  // instance of cipher itself
+    //Keccak instance
+    private static Keccak  m_instance = null;  // instance of cipher itself
     
-    //sha3 context
-    private static byte  mdlen;
+    //Keccak context
+    private static short mdlen;
     private static short pt;
     private static short rsiz;
     
-    //Pad for NIST-Sha3 = 0x06, Keccak = 0x01
+    //Pad for NIST-Sha3 = 0x06, Keccak = 0x01, Shake = 0x1F
     private static byte pad = 0x06;
     
     //Arrays
@@ -314,7 +321,7 @@ public class Sha3 extends MessageDigest {
     // BEGIN INTERFACE //
     
     //Constructor
-    protected Sha3() {}
+    protected Keccak() {}
     
     //generate hash of all data, reset engine
     //* TODO throws CryptoException.ILLEGAL_USE if the accumulated message length is greater than the maximum length supported by the algorithm. 
@@ -327,9 +334,28 @@ public class Sha3 extends MessageDigest {
         
         st[pt] ^= pad;
         st[(short) (rsiz-1)] ^= 0x80;
-        keccakf(st);
-        for (i = 0; i < mdlen; i++) {
-            outBuff[(short) (outOffset + i)] = st[i];
+
+        short chunks = (short)(mdlen/rsiz);
+        short last = (short)(mdlen%rsiz);
+        short copiedBytes = 0;
+
+        while (chunks > 0)
+        {
+            keccakf(st);
+            chunks--;
+            for (i = 0; i < rsiz; i++)
+            {
+                outBuff[(short)(copiedBytes + outOffset + i)] = st[i];
+            }
+            copiedBytes+=rsiz;
+        }
+        if (last > 0)
+        {
+            keccakf(st);
+            for (i = 0; i < last; i++)
+            {
+                outBuff[(short)(copiedBytes + outOffset + i)] = st[i];
+            }
         }
         return mdlen;
     }
@@ -350,38 +376,71 @@ public class Sha3 extends MessageDigest {
                 return ALG_SHA3_512;
         }
     }
+
+    // Set shake return length
+    public void setShakeDigestLength(short length)
+    {
+        mdlen = length;
+    }
     
-    // get sha3 instance
-    public static Sha3 getInstance(byte algorithm) throws CryptoException {
+    // get Keccak instance
+    public static Keccak getInstance(byte algorithm) throws CryptoException {
         switch (algorithm) {
             case ALG_KECCAK_224:
                 pad = 0x01;
-            case ALG_SHA3_224:
-                //not supported by MessageDigest
                 mdlen = (short) 28;
                 rsiz = (short) 144;
                 break;
-
+            case ALG_SHA3_224:
+                //not supported by MessageDigest
+                pad = 0x06;
+                mdlen = (short) 28;
+                rsiz = (short) 144;
+                break;
             case ALG_KECCAK_256:
                 pad = 0x01;
+                mdlen = (short) 32;
+                rsiz = (short) 136;
+                break;
             case ALG_SHA3_256:
             case ALG_SHA_256:
+                pad = 0x06;
                 mdlen = (short) 32;
                 rsiz = (short) 136;
                 break;
             case ALG_KECCAK_384:
                 pad = 0x01;
+                mdlen = (short) 48;
+                rsiz = (short) 104;
+                break;
             case ALG_SHA3_384:
             case ALG_SHA_384:
+                pad = 0x06;
                 mdlen = (short) 48;
                 rsiz = (short) 104;
                 break;
             case ALG_KECCAK_512:
                 pad = 0x01;
-            case ALG_SHA3_512:
-            case ALG_SHA_512:
                 mdlen = (short) 64;
                 rsiz = (short) 72;
+                break;
+            case ALG_SHA3_512:
+            case ALG_SHA_512:
+                pad = 0x06;
+                mdlen = (short) 64;
+                rsiz = (short) 72;
+                break;
+            case ALG_SHAKE_128:
+                pad = 0x1F;
+                //Default 32, length can be set by calling setShakeDigestLength()
+                mdlen = (short) 32;
+                rsiz = (short) 168;
+                break;
+            case ALG_SHAKE_256:
+                pad = 0x1F;
+                //Default 64, length can be set by calling setShakeDigestLength()
+                mdlen = (short) 64;
+                rsiz = (short) 136;
                 break;
             default:
                 throw new CryptoException(CryptoException.NO_SUCH_ALGORITHM);
@@ -389,14 +448,15 @@ public class Sha3 extends MessageDigest {
         pt = 0;
         
         if (m_instance == null) {
-            m_instance = new Sha3();
+            m_instance = new Keccak();
         }
         return m_instance;
     }
     
     @Override
     public byte getLength() {
-        return mdlen;
+        //Cast to byte is problematic for Shake
+        return (byte)mdlen;
     }
     
     @Override
@@ -417,7 +477,7 @@ public class Sha3 extends MessageDigest {
         short i;
         for (i = 0; i < inLength; i++) {
             //this is big endian
-            st[j++] ^= inBuff[(byte) (inOffset + i)];
+            st[j++] ^= inBuff[(short) (inOffset + i)];
             if (j >= rsiz) {
                 keccakf(st);
                 j = 0;

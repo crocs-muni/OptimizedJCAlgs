@@ -27,8 +27,8 @@ public class Sha3Applet extends javacard.framework.Applet
     //Error codes
     final static short SW_OBJECT_NOT_AVAILABLE      = (short) 0x6711;
 
-    private   MessageDigest m_sha3 = null;      //sha3 message digest
-    //private   MessageDigest m_sha2 = null;      //sha2 message digest  
+    private   MessageDigest m_keccak = null;      //Keccak message digest
+    //private   MessageDigest m_sha2 = null;      //sha2 message digest
         
     // TEMPORARRY ARRAY IN RAM
     private byte m_ramArray1[] = null;
@@ -58,8 +58,6 @@ public class Sha3Applet extends javacard.framework.Applet
             // TEMPORARY BUFFER USED FOR FAST OPERATION WITH MEMORY LOCATED IN RAM
             m_ramArray1 = JCSystem.makeTransientByteArray((short) 0xff, JCSystem.CLEAR_ON_DESELECT);
 
-            //Create Sha3 OBJECT
-            m_sha3 = Sha3.getInstance(Sha3.ALG_SHA3_256);
             //compare with sha2
             //m_sha2 = MessageDigest.getInstance(MessageDigest.ALG_SHA_256, false);
 
@@ -121,7 +119,10 @@ public class Sha3Applet extends javacard.framework.Applet
         if (apduBuffer[ISO7816.OFFSET_CLA] == CLA_SIMPLEAPPLET) {
             switch ( apduBuffer[ISO7816.OFFSET_INS] )
             {
-                case INS_MESSAGE_DIGEST: Sha3Digest(apdu); break;
+                case 0x00: computeKeccak(apdu, Keccak.ALG_SHA3_256); break;
+                case 0x01: computeKeccak(apdu, Keccak.ALG_SHA3_512); break;
+                case 0x02: computeKeccak(apdu, Keccak.ALG_SHAKE_128); break;
+                case 0x03: computeKeccak(apdu, Keccak.ALG_SHAKE_256); break;
                 default :
                     // The INS code is not supported by the dispatcher
                     ISOException.throwIt( ISO7816.SW_INS_NOT_SUPPORTED ) ;
@@ -133,12 +134,17 @@ public class Sha3Applet extends javacard.framework.Applet
     }
     
     
-    public void Sha3Digest(APDU apdu){
+    public void computeKeccak(APDU apdu, byte algorithm){
+        //Create Keccak OBJECT
+        m_keccak = Keccak.getInstance(algorithm);
+        m_keccak.reset();
+//        m_keccak.setShakeDigestLength((short)128); //Optional function to set shake return bytes to 128 bytes
+
         byte[]    apdubuf = apdu.getBuffer();
         short     dataLen = apdu.setIncomingAndReceive();
         
         Util.arrayCopyNonAtomic(apdubuf, ISO7816.OFFSET_CDATA, m_ramArray1, (short) 0, dataLen);
-        short ret1 = m_sha3.doFinal(m_ramArray1, (short) 0, dataLen, apdubuf, (short) 0);
+        short ret1 = m_keccak.doFinal(m_ramArray1, (short) 0, dataLen, apdubuf, (short) 0);
         //short ret2 = m_sha2.doFinal(m_ramArray1, (short) 0, dataLen, apdubuf, (short) 0);
         
         // SEND OUTGOING BUFFER
