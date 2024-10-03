@@ -455,7 +455,12 @@ public class Keccak extends MessageDigest {
     
     @Override
     public byte getLength() {
-        //Cast to byte is problematic for Shake
+        /*
+        * Casting byte is an issue. However, the getLength function in the abstract MessageDigest class is of return
+        * type byte, where the length of shake can be set to max ~32000 (signed short), but since it is overridden, it
+        * is not possible to change its type. Alternatively the abstraction could be removed, otherwise it has to be
+        * cast and if the length is set to larger than 127 it will cast and show incorrect results.
+        * */
         return (byte)mdlen;
     }
     

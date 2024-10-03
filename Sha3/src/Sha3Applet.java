@@ -119,10 +119,16 @@ public class Sha3Applet extends javacard.framework.Applet
         if (apduBuffer[ISO7816.OFFSET_CLA] == CLA_SIMPLEAPPLET) {
             switch ( apduBuffer[ISO7816.OFFSET_INS] )
             {
-                case 0x00: computeKeccak(apdu, Keccak.ALG_SHA3_256); break;
-                case 0x01: computeKeccak(apdu, Keccak.ALG_SHA3_512); break;
-                case 0x02: computeKeccak(apdu, Keccak.ALG_SHAKE_128); break;
-                case 0x03: computeKeccak(apdu, Keccak.ALG_SHAKE_256); break;
+                case 0x00: computeKeccak(apdu, Keccak.ALG_SHA3_224); break;
+                case 0x01: computeKeccak(apdu, Keccak.ALG_SHA3_256); break;
+                case 0x02: computeKeccak(apdu, Keccak.ALG_SHA3_384); break;
+                case 0x03: computeKeccak(apdu, Keccak.ALG_SHA3_512); break;
+                case 0x04: computeKeccak(apdu, Keccak.ALG_KECCAK_224); break;
+                case 0x05: computeKeccak(apdu, Keccak.ALG_KECCAK_256); break;
+                case 0x06: computeKeccak(apdu, Keccak.ALG_KECCAK_384); break;
+                case 0x07: computeKeccak(apdu, Keccak.ALG_KECCAK_512); break;
+                case 0x08: computeKeccak(apdu, Keccak.ALG_SHAKE_128); break;
+                case 0x09: computeKeccak(apdu, Keccak.ALG_SHAKE_256); break;
                 default :
                     // The INS code is not supported by the dispatcher
                     ISOException.throwIt( ISO7816.SW_INS_NOT_SUPPORTED ) ;
@@ -138,7 +144,7 @@ public class Sha3Applet extends javacard.framework.Applet
         //Create Keccak OBJECT
         m_keccak = Keccak.getInstance(algorithm);
         m_keccak.reset();
-//        m_keccak.setShakeDigestLength((short)128); //Optional function to set shake return bytes to 128 bytes
+//        ((Keccak)m_keccak).setShakeDigestLength((short)128); //Optional function to set shake return bytes to 128 bytes
 
         byte[]    apdubuf = apdu.getBuffer();
         short     dataLen = apdu.setIncomingAndReceive();
