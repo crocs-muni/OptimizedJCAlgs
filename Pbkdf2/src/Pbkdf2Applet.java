@@ -32,8 +32,6 @@ public class Pbkdf2Applet extends javacard.framework.Applet
     private byte m_ramArray1[] = null;
     private byte m_ramArray2[] = null;
     private byte m_ramArray3[] = null;
-    // PERSISTENT ARRAY IN EEPROM
-    private byte m_dataArray[] = null;
 
     /**
      * AegisApplet constructor
@@ -57,13 +55,10 @@ public class Pbkdf2Applet extends javacard.framework.Applet
            // go to proprietary data
             dataOffset++;
 
-            // PERSISTENT BUFFER IN EEPROM
-            m_dataArray = new byte[ARRAY_LENGTH];
-            Util.arrayFillNonAtomic(m_dataArray, (short) 0, ARRAY_LENGTH, (byte) 0);
             // TEMPORARY BUFFER USED FOR FAST OPERATION WITH MEMORY LOCATED IN RAM
             m_ramArray1 = JCSystem.makeTransientByteArray((short) 0xff, JCSystem.CLEAR_ON_DESELECT);
-            m_ramArray2 = JCSystem.makeTransientByteArray((short) 0xff, JCSystem.CLEAR_ON_DESELECT);
-            m_ramArray3 = JCSystem.makeTransientByteArray((short) 0xff, JCSystem.CLEAR_ON_DESELECT);
+            m_ramArray2 = JCSystem.makeTransientByteArray((short) 0x10, JCSystem.CLEAR_ON_DESELECT);
+            m_ramArray3 = JCSystem.makeTransientByteArray((short) 0x20, JCSystem.CLEAR_ON_DESELECT);
 
             m_pbkdf2 = PBKDF2.getInstance(PBKDF2.ALG_SHA);
 
