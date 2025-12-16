@@ -85,18 +85,60 @@ public class MorusCore {
     }
   
     void xor(byte srcdstIndex, byte inpIndex){
-          for(byte i=0; i<16; i++)
-                state[(byte)(srcdstIndex+i)] ^= state[(byte)(inpIndex+i)];
+        state[(byte)(srcdstIndex+0)] ^= state[(byte)(inpIndex+0)];
+        state[(byte)(srcdstIndex+1)] ^= state[(byte)(inpIndex+1)];
+        state[(byte)(srcdstIndex+2)] ^= state[(byte)(inpIndex+2)];
+        state[(byte)(srcdstIndex+3)] ^= state[(byte)(inpIndex+3)];
+        state[(byte)(srcdstIndex+4)] ^= state[(byte)(inpIndex+4)];
+        state[(byte)(srcdstIndex+5)] ^= state[(byte)(inpIndex+5)];
+        state[(byte)(srcdstIndex+6)] ^= state[(byte)(inpIndex+6)];
+        state[(byte)(srcdstIndex+7)] ^= state[(byte)(inpIndex+7)];
+        state[(byte)(srcdstIndex+8)] ^= state[(byte)(inpIndex+8)];
+        state[(byte)(srcdstIndex+9)] ^= state[(byte)(inpIndex+9)];
+        state[(byte)(srcdstIndex+10)] ^= state[(byte)(inpIndex+10)];
+        state[(byte)(srcdstIndex+11)] ^= state[(byte)(inpIndex+11)];
+        state[(byte)(srcdstIndex+12)] ^= state[(byte)(inpIndex+12)];
+        state[(byte)(srcdstIndex+13)] ^= state[(byte)(inpIndex+13)];
+        state[(byte)(srcdstIndex+14)] ^= state[(byte)(inpIndex+14)];
+        state[(byte)(srcdstIndex+15)] ^= state[(byte)(inpIndex+15)];
     }
     
     void xorMsg(byte Index, byte[] msgblk){
-        for(byte i=0; i<16; i++)
-            state[(byte)(Index+i)] ^= msgblk[i];
+        state[(byte)(Index+0)] ^= msgblk[0];
+        state[(byte)(Index+1)] ^= msgblk[1];
+        state[(byte)(Index+2)] ^= msgblk[2];
+        state[(byte)(Index+3)] ^= msgblk[3];
+        state[(byte)(Index+4)] ^= msgblk[4];
+        state[(byte)(Index+5)] ^= msgblk[5];
+        state[(byte)(Index+6)] ^= msgblk[6];
+        state[(byte)(Index+7)] ^= msgblk[7];
+        state[(byte)(Index+8)] ^= msgblk[8];
+        state[(byte)(Index+9)] ^= msgblk[9];
+        state[(byte)(Index+10)] ^= msgblk[10];
+        state[(byte)(Index+11)] ^= msgblk[11];
+        state[(byte)(Index+12)] ^= msgblk[12];
+        state[(byte)(Index+13)] ^= msgblk[13];
+        state[(byte)(Index+14)] ^= msgblk[14];
+        state[(byte)(Index+15)] ^= msgblk[15];
     }
     
     void andxor(byte dstIndex, byte inp1Index, byte inp2Index){
-        for(byte i=0; i<16; i++)
-            state[(byte)(dstIndex+i)] ^= (byte)(state[(byte)(inp1Index+i)] & state[(byte)(inp2Index+i)]);
+        state[(byte)(dstIndex+0)] ^= (byte)(state[(byte)(inp1Index+0)] & state[(byte)(inp2Index+0)]);
+        state[(byte)(dstIndex+1)] ^= (byte)(state[(byte)(inp1Index+1)] & state[(byte)(inp2Index+1)]);
+        state[(byte)(dstIndex+2)] ^= (byte)(state[(byte)(inp1Index+2)] & state[(byte)(inp2Index+2)]);
+        state[(byte)(dstIndex+3)] ^= (byte)(state[(byte)(inp1Index+3)] & state[(byte)(inp2Index+3)]);
+        state[(byte)(dstIndex+4)] ^= (byte)(state[(byte)(inp1Index+4)] & state[(byte)(inp2Index+4)]);
+        state[(byte)(dstIndex+5)] ^= (byte)(state[(byte)(inp1Index+5)] & state[(byte)(inp2Index+5)]);
+        state[(byte)(dstIndex+6)] ^= (byte)(state[(byte)(inp1Index+6)] & state[(byte)(inp2Index+6)]);
+        state[(byte)(dstIndex+7)] ^= (byte)(state[(byte)(inp1Index+7)] & state[(byte)(inp2Index+7)]);
+        state[(byte)(dstIndex+8)] ^= (byte)(state[(byte)(inp1Index+8)] & state[(byte)(inp2Index+8)]);
+        state[(byte)(dstIndex+9)] ^= (byte)(state[(byte)(inp1Index+9)] & state[(byte)(inp2Index+9)]);
+        state[(byte)(dstIndex+10)] ^= (byte)(state[(byte)(inp1Index+10)] & state[(byte)(inp2Index+10)]);
+        state[(byte)(dstIndex+11)] ^= (byte)(state[(byte)(inp1Index+11)] & state[(byte)(inp2Index+11)]);
+        state[(byte)(dstIndex+12)] ^= (byte)(state[(byte)(inp1Index+12)] & state[(byte)(inp2Index+12)]);
+        state[(byte)(dstIndex+13)] ^= (byte)(state[(byte)(inp1Index+13)] & state[(byte)(inp2Index+13)]);
+        state[(byte)(dstIndex+14)] ^= (byte)(state[(byte)(inp1Index+14)] & state[(byte)(inp2Index+14)]);
+        state[(byte)(dstIndex+15)] ^= (byte)(state[(byte)(inp1Index+15)] & state[(byte)(inp2Index+15)]);
     }
     
     void morus_stateupdate(byte[] msgblk){
