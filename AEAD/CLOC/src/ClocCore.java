@@ -184,13 +184,11 @@ public class ClocCore {
         es[(short)(nlen+1)] ^= 0x80;
         if(ozp == 1) {
             tmp[0] = (byte)(es[0] ^ es[4]); tmp[1] = (byte)(es[1] ^ es[5]); tmp[2] = (byte)(es[2] ^ es[6]); tmp[3] = (byte)(es[3] ^ es[7]);         
-            es[0] = es[4]; es[1] = es[5]; es[2] = es[6]; es[3] = es[7];         
-            es[4] = es[8]; es[5] = es[9]; es[6] = es[10]; es[7] = es[11];          
-            es[8] = es[12]; es[9] = es[13]; es[10] = es[14]; es[11] = es[15];          
-            es[12] = tmp[0]; es[13] = tmp[1]; es[14] = tmp[2]; es[15] = tmp[3];
+            Util.arrayCopyNonAtomic(es, (short) 4, es, (short) 0, (short) 12);
+            Util.arrayCopyNonAtomic(tmp, (short) 0, es, (short) 12, (short) 4);
         } else {
             es[0] ^= es[8]; es[1] ^= es[9]; es[2] ^= es[10]; es[3] ^= es[11];         
-            tmp[0] = es[4]; tmp[1] = es[5]; tmp[2] = es[6]; tmp[3] = es[7];      
+            Util.arrayCopyNonAtomic(es, (short) 4, tmp, (short) 0, (short) 4);
             es[4] ^= es[12]; es[5] ^= es[13]; es[6] ^= es[14]; es[7] ^= es[15];         
             es[12] = (byte)(es[8] ^ es[4]); es[13] = (byte)(es[9] ^ es[5]); es[14] = (byte)(es[10] ^ es[6]); es[15] = (byte)(es[11] ^ es[7]);         
             es[8] = (byte)(tmp[0] ^ es[0]); es[9] = (byte)(tmp[1] ^ es[1]); es[10] = (byte)(tmp[2] ^ es[2]); es[11] = (byte)(tmp[3] ^ es[3]);
@@ -204,18 +202,16 @@ public class ClocCore {
     byte ae(byte enc_dec) {
         if(ptlen != 0) {
             tmp[0] = (byte)(ts[0] ^ ts[4]); tmp[1] = (byte)(ts[1] ^ ts[5]); tmp[2] = (byte)(ts[2] ^ ts[6]); tmp[3] = (byte)(ts[3] ^ ts[7]);         
-            ts[0] = ts[4]; ts[1] = ts[5]; ts[2] = ts[6]; ts[3] = ts[7];         
-            ts[4] = ts[8]; ts[5] = ts[9]; ts[6] = ts[10]; ts[7] = ts[11];          
-            ts[8] = ts[12]; ts[9] = ts[13]; ts[10] = ts[14]; ts[11] = ts[15];          
-            ts[12] = tmp[0]; ts[13] = tmp[1]; ts[14] = tmp[2]; ts[15] = tmp[3];
+            Util.arrayCopyNonAtomic(ts, (short) 4, ts, (short) 0, (short) 12);
+            Util.arrayCopyNonAtomic(tmp, (short) 0, ts, short(12), (short) 4);
             m_encryptCipher.doFinal(ts, (short)0, (short)16, ts, (short) 0);
         }
         else {
-            tmp[0] = ts[0]; tmp[1] = ts[1]; tmp[2] = ts[2]; tmp[3] = ts[3];         
-            ts[0] = ts[8]; ts[1] = ts[9]; ts[2] = ts[10]; ts[3] = ts[11];         
+            Util.arrayCopyNonAtomic(ts, (short) 0, tmp, (short) 0, (short) 4);
+            Util.arrayCopyNonAtomic(ts, (short) 8, ts, (short) 0, (short) 4);
             ts[8] = (byte)(tmp[0] ^ ts[4]); ts[9] = (byte)(tmp[1] ^ ts[5]); ts[10] = (byte)(tmp[2] ^ ts[6]); ts[11] = (byte)(tmp[3] ^ ts[7]);         
-            tmp[0] = ts[4]; tmp[1] = ts[5]; tmp[2] = ts[6]; tmp[3] = ts[7];      
-            ts[4] = ts[12]; ts[5] = ts[13]; ts[6] = ts[14]; ts[7] = ts[15];         
+            Util.arrayCopyNonAtomic(ts, (short) 4, tmp, (short) 0, (short) 4);
+            Util.arrayCopyNonAtomic(ts, (short) 12, ts, (short) 4, (short) 4);
             ts[12] = (byte)(ts[0] ^ tmp[0]); ts[13] = (byte)(ts[1] ^ tmp[1]); ts[14] = (byte)(ts[2] ^ tmp[2]); ts[15] = (byte)(ts[3] ^ tmp[3]);
             m_encryptCipher.doFinal(ts, (short)0, (short)16, ts, (short) 0);
             Util.arrayCopyNonAtomic(ts, (short)0, tag, (short)0,  (short)8);
@@ -261,14 +257,12 @@ public class ClocCore {
         if(lastblocklen != STATE_LEN) {
             ts[lastblocklen] ^= (byte)0x80;
             tmp[0] = (byte)(ts[0] ^ ts[4]); tmp[1] = (byte)(ts[1] ^ ts[5]); tmp[2] = (byte)(ts[2] ^ ts[6]); tmp[3] = (byte)(ts[3] ^ ts[7]);         
-            ts[0] = ts[4]; ts[1] = ts[5]; ts[2] = ts[6]; ts[3] = ts[7];         
-            ts[4] = ts[8]; ts[5] = ts[9]; ts[6] = ts[10]; ts[7] = ts[11];          
-            ts[8] = ts[12]; ts[9] = ts[13]; ts[10] = ts[14]; ts[11] = ts[15];          
-            ts[12] = tmp[0]; ts[13] = tmp[1]; ts[14] = tmp[2]; ts[15] = tmp[3];
+            Util.arrayCopyNonAtomic(ts, (short) 4, ts, (short) 0, (short) 12);
+            Util.arrayCopyNonAtomic(tmp, (short) 0, ts, (short) 12, (short) 4);
         }
         else {
             ts[0] ^= ts[8]; ts[1] ^= ts[9]; ts[2] ^= ts[10]; ts[3] ^= ts[11];         
-            tmp[0] = ts[4]; tmp[1] = ts[5]; tmp[2] = ts[6]; tmp[3] = ts[7];      
+            Util.arrayCopyNonAtomic(ts, (short) 4, tmp, (short) 0, (short) 4);
             ts[4]  ^= ts[12]; ts[5] ^= ts[13]; ts[6] ^= ts[14]; ts[7] ^= ts[15];         
             ts[12]  = (byte)(ts[8]  ^ ts[4]); ts[13] = (byte)(ts[9]  ^ ts[5]);
             ts[14]  = (byte)(ts[10] ^ ts[6]); ts[15] = (byte)(ts[11] ^ ts[7]);         
