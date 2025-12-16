@@ -59,18 +59,36 @@ public class AsconCore {
     }
     
     void xor(byte[] in1, byte[] in2, byte[] out){
-        for(short i=0; i<8; i++)
-            out[i] = (byte)(in1[i] ^ in2[i]);
+        out[0] = ((byte) (in1[0] ^ in2[0]));
+        out[1] = ((byte) (in1[1] ^ in2[1]));
+        out[2] = ((byte) (in1[2] ^ in2[2]));
+        out[3] = ((byte) (in1[3] ^ in2[3]));
+        out[4] = ((byte) (in1[4] ^ in2[4]));
+        out[5] = ((byte) (in1[5] ^ in2[5]));
+        out[6] = ((byte) (in1[6] ^ in2[6]));
+        out[7] = ((byte) (in1[7] ^ in2[7]));
     }
     
     void and(byte[] in1, byte[] in2, byte[] out){
-        for(short i=0; i<8; i++)
-            out[i] = (byte)(in1[i] & in2[i]);
+        out[0] = ((byte) (in1[0] & in2[0]));
+        out[1] = ((byte) (in1[1] & in2[1]));
+        out[2] = ((byte) (in1[2] & in2[2]));
+        out[3] = ((byte) (in1[3] & in2[3]));
+        out[4] = ((byte) (in1[4] & in2[4]));
+        out[5] = ((byte) (in1[5] & in2[5]));
+        out[6] = ((byte) (in1[6] & in2[6]));
+        out[7] = ((byte) (in1[7] & in2[7]));
     }
     
     void not(byte[] in1, byte[] out){
-        for(short i=0; i<8; i++)
-            out[i] = (byte)(~in1[i]);
+        out[0] = ((byte) (~in1[0]));
+        out[1] = ((byte) (~in1[1]));
+        out[2] = ((byte) (~in1[2]));
+        out[3] = ((byte) (~in1[3]));
+        out[4] = ((byte) (~in1[4]));
+        out[5] = ((byte) (~in1[5]));
+        out[6] = ((byte) (~in1[6]));
+        out[7] = ((byte) (~in1[7]));
     }
     
     //alternative right rotation
