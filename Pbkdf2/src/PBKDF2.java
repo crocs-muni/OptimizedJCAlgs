@@ -42,7 +42,7 @@ public class PBKDF2 {
     //macros
     private final static short  SZERO           = (short) 0x0;
     private final static byte   BZERO           = (byte)  0x0;
-    private final static byte   BONE            = (byte)  0x01;
+    private final static byte[] int32BE         = {BZERO, BZERO, BZERO, (byte) 0x01};
     
     //variables
     private static short mdlen;                                 //message digest length
@@ -144,10 +144,7 @@ public class PBKDF2 {
         
         //concatenate with int32BE(1) (salt is max 16, U_i is at least 20, so 4 more bytes can always fit there)
         Util.arrayCopyNonAtomic(salt, saltOffset, U_i, SZERO, saltLength);
-        U_i[         saltLength     ] = BZERO;
-        U_i[(short) (saltLength + 1)] = BZERO;
-        U_i[(short) (saltLength + 2)] = BZERO;
-        U_i[(short) (saltLength + 3)] = BONE;
+        Util.arrayCopyNonAtomic(int32BE, SZERO, U_i, saltLength, (short) 0x04);
         
         //generate first HMAC
         //hardware HMAC - uncomment these 3 lines and comment the next line to swap HW/SW computation
@@ -164,8 +161,11 @@ public class PBKDF2 {
             //m_hmac.sign(U_i, SZERO, mdlen, U_i, SZERO);  // Hardware hmac
             hmac(password, passwordOffset, passwordLength, mdlen);          // Software hmac
             //xor U_(i-1) with U_i
-            for (short j = 0; j < mdlen; j++) {
+            for (short j = 0; j < mdlen; j += 4) {
                 out[(short) (outOffset + j)] ^= U_i[j];
+                out[(short) (outOffset + j + 1)] ^= U_i[(short) (j+1)];
+                out[(short) (outOffset + j + 2)] ^= U_i[(short) (j+2)];
+                out[(short) (outOffset + j + 3)] ^= U_i[(short) (j+3)];
             }
         }
         
